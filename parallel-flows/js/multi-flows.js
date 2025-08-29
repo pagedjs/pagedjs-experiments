@@ -84,11 +84,33 @@ class multilang extends Paged.Handler {
     this.flowTracker = [];
 
     this.parallelImpacts = [];
+
+    // this will find elements to sync in the flow:
+    // let say you want to start one specific element of a flow at the same time another element is layout out (or more likely, you want to wait for the lang to finish before starting the next one) you need to set that info in the css. Those will be markedup as parallelSync
+    this.parallelSync = [];
   }
 
   onDeclaration(declaration, dItem, dList, rule) {
+    // if flow location is not set , make it same spread by default
     if (!this.flowLocation == "samespread" || !this.flowLocation == "samepage")
       this.flowLocation = "samespread";
+
+    // let find a parallel-sync
+
+    if (declaration.property == "--parallel-sync") {
+      let sel = csstree.generate(rule.ruleNode.prelude);
+      sel = sel.replace('[data-id="', "#");
+      sel = sel.replace('"]', "");
+      let itemsList = sel.split(",");
+
+      console.log(declaration.value.value);
+
+      itemsList.forEach((el) => {
+        // this.parallelSync[]
+      });
+    }
+
+    // if you find a parallel-flow
     if (declaration.property == "--parallel-flow") {
       let sel = csstree.generate(rule.ruleNode.prelude);
       sel = sel.replace('[data-id="', "#");
@@ -404,7 +426,8 @@ class multilang extends Paged.Handler {
                 .querySelector("div")
                 .insertAdjacentElement("beforeend", obj);
 
-              // pageToRemove.remove();
+              // remove unused page
+              pageToRemove.remove();
             }
           }
         });
@@ -443,12 +466,14 @@ class multilang extends Paged.Handler {
   }
 }
 Paged.registerHandlers(multilang);
+
 function getBiggestHeight(arr) {
   return arr.reduce(
     (max, obj) => (obj.height > max.height ? obj : max),
     arr[0],
   );
 }
+
 function getAllButBiggestHeight(arr) {
   const biggest = getBiggestHeight(arr);
   return arr.filter((obj) => obj !== biggest);

@@ -96,3 +96,7 @@ section.a {
     width: 350px !important;
   }
 }
+
+h3 {
+  --parallel-sync: beta all;
+}
