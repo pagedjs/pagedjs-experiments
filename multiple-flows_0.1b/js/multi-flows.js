@@ -1,13 +1,4 @@
 //    --------------------------------------------------------
-//    Note for the user :D
-//
-//    HELLO, I HOPE YOU’RE DOING GOOD :D
-//    IF YOU FIND THAT SCRIPT, PLEASE WAIT FOR THE SCRIPT RELEASE PARTY
-//    THAT WE’LL THROW EARLY APRIL 2025 BEFORE PUTTING THOSE FILES
-//    IN ANY PUBLIC SPACE. THANK YOU!
-//
-//    --------------------------------------------------------
-//
 //    MULTI FLOWS IN PAGED.JS    v 0.1b
 //    Think grid on steroid (but a bit more complex than grid for now)
 //
