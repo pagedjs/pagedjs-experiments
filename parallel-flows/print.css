@@ -60,7 +60,7 @@ section.b {
 section.c {
   width: 60ch;
   margin-left: auto;
-  --parallel-flow: alpha;
+  --parallel-flow: beta;
 }
 
 section.d {
@@ -79,8 +79,11 @@ section.d h1 {
   /* parallel impact will set the elements to affect the rest of the flows*/
   /* depending on the element, the parallel impact objects will need custom css, that you can do using `#selectorID-overlap {}`*/
   --parallel-impact: all;
+  background: orange;
   width: 120mm;
   right: 0mm;
+  height: 40mm;
+  display: block;
   height: auto;
 }
 
@@ -93,10 +96,7 @@ section.c {
 section.a {
   #porco-overlap {
     /* add a border to show the location of the overlap*/
+
     width: 350px !important;
   }
-}
-
-h3 {
-  /* --parallel-sync: beta all; */
 }
