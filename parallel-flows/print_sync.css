@@ -57,12 +57,6 @@ section.b {
   margin-left: auto;
 }
 
-section.c {
-  width: 60ch;
-  margin-left: auto;
-  --parallel-flow: beta;
-}
-
 section.d {
   /*parallel-flow: name,  this will trigger the parallel-flow script*/
   --parallel-flow: beta;
@@ -88,5 +82,11 @@ section.d h1 {
 }
 
 h3 {
-  --parallel-sync: beta h3;
+  --parallel-sync: alpha h3;
+}
+
+section.c {
+  width: 60ch;
+  margin-left: auto;
+  --parallel-flow: alpha;
 }

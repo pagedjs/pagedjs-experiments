@@ -139,6 +139,27 @@ class multilang extends Paged.Handler {
         this.parallelImpacts.push(el);
       });
     }
+
+    if (declaration.property == "--paged-parallel-sync") {
+      //record selectors
+      let sel = csstree.generate(rule.ruleNode.prelude);
+      sel = sel.replace('[data-id="', "#");
+      sel = sel.replace('"]', "");
+      let itemsList = sel.split(",");
+
+      //record flow name
+      let flow = declaration.value.value.trim().split(" ")[0];
+
+      // record flow values as selectors
+      let synchro = declaration.value.value.trim().split(" ")[1];
+
+      let synchroList = [];
+      itemsList.forEach((el) => {
+        synchroList.push([sel, synchro]);
+      });
+
+      this.parallelSync.push({ flow: flow, synchro: synchroList });
+    }
   }
 
   beforeParsed(content, chunker) {

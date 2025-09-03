@@ -100,3 +100,7 @@ section.a {
     width: 350px !important;
   }
 }
+
+h2 {
+  --paged-parallel-sync: alpha h2;
+}
