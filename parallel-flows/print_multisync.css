@@ -56,15 +56,11 @@ section {
   --parallel-flow: orange;
 }
 
-#chap-2-fr {
-  --parallel-flow: beta;
-}
+#chap-2-fr,
 #chap-2-en {
   --parallel-flow: beta;
 }
-#chap-3-fr {
-  --parallel-flow: ceta;
-}
+#chap-3-fr,
 #chap-3-en {
   --parallel-flow: ceta;
 }
