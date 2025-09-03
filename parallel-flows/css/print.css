@@ -101,6 +101,6 @@ section.a {
 /* parallel sync only in certain flow*/
 h2 {
   /* --paged-parallel-sync: [flow identifier] [selectors] ; */
-  --paged-parallel-sync: alpha h2;
+  /* --paged-parallel-sync: alpha h2; */
   break-before: page;
 }

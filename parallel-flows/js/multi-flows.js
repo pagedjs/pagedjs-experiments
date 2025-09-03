@@ -464,58 +464,55 @@ class multilang extends Paged.Handler {
         guestsObj.push(document.querySelectorAll(gu.selector));
       });
 
+      // let guests = [];
+      //
+      // guestIds.forEach((selectors) => {
+      //   guests = [...document.querySelectorAll(hostId.selector)];
+      // });
+      //
+
       if (this.flowLocation == "samepage") {
-        // make an array of the guestObj
-        const guestGroups = Array.from(guestsObj);
+        guestsObj.forEach((guests, index, thearray) => {
+          // for (let [...guests] of [...guestsObj]) {
+          for (let i = 0, j = 0; i < hostObj.length; i++, j++) {
+            if (hostObj[i] && guests[i]) {
+              let obj = guests[i];
+              let pageToRemove = guests[i].closest(".pagedjs_page");
 
-        // then for each
-        guestGroups.forEach((rawGroup, groupIndex) => {
-          // make an array of the guestObj
-          const guestGroup = Array.from(rawGroup); // Now it's a real array
+              // if (pageToRemove.querySelector("[data-sync]")) {
+              //   if (
+              //     !hostObj[i].querySelector(
+              //       `[data-sync="${pageToRemove.querySelector("[data-sync]").dataset.sync}"]`,
+              //     )
+              //   ) {
+              //     console.log(thearray);
+              //     thearray = thearray.splice(
+              //       i,
+              //       0,
+              //       document.createElement("section"),
+              //     );
+              //   }
 
-          for (let i = 0; i < guestGroup.length; i++) {
-            const guestEl = guestGroup[i];
-            const hostEl = hostObj[i];
+              //get the value before touching any of em
+              let left = obj.offsetLeft;
+              let width = obj.offsetWidth;
+              let top = obj.offsetTop;
+              let height = obj.offsetHeight;
 
-            // check if there are both
-            if (!guestEl || !hostEl) continue;
+              // bring back values
+              obj.style.height = `${height}px`;
+              obj.style.position = "absolute";
+              obj.style.left = `${left}px`;
+              obj.style.width = `${width}px`;
+              obj.style.top = `${top}px`;
 
-            //check for the datasynce
-            const guestPage = guestEl.closest(".pagedjs_page");
-            const syncEl = guestPage?.querySelector("[data-sync]");
-
-            if (!syncEl) continue;
-
-            // find the host datasync
-            const syncValue = syncEl.dataset.sync;
-            const hostHasSync = hostEl.querySelector(
-              `[data-sync="${syncValue}"]`,
-            );
-
-            if (hostHasSync) {
-              // Move guestEl into host, and use the deconstructing array
-              const { offsetLeft, offsetTop, offsetWidth, offsetHeight } =
-                guestEl;
-
-              guestEl.style.position = "absolute";
-              guestEl.style.left = `${offsetLeft}px`;
-              guestEl.style.top = `${offsetTop}px`;
-              guestEl.style.width = `${offsetWidth}px`;
-              guestEl.style.height = `${offsetHeight}px`;
-
-              const hostContent = hostEl
+              hostObj[i]
                 .closest(".pagedjs_page_content")
-                ?.querySelector("div");
-              if (hostContent) {
-                hostContent.insertAdjacentElement("beforeend", guestEl);
-              }
+                .querySelector("div")
+                .insertAdjacentElement("beforeend", obj);
 
-              // remove the page if there is one
-              guestPage?.remove();
-            } else {
-              const placeholder = document.createElement("section");
-              placeholder.classList.add("sync-placeholder");
-              guestGroup.splice(i, 0, placeholder);
+              // remove unused page
+              pageToRemove.remove();
             }
           }
         });
