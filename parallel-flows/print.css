@@ -96,7 +96,6 @@ section.c {
 section.a {
   #porco-overlap {
     /* add a border to show the location of the overlap*/
-
     width: 350px !important;
   }
 }

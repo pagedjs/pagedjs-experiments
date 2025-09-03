@@ -98,9 +98,12 @@ class multilang extends Paged.Handler {
     // if you find a parallel-flow
     if (declaration.property == "--parallel-flow") {
       let sel = csstree.generate(rule.ruleNode.prelude);
-      sel = sel.replace('[data-id="', "#");
-      sel = sel.replace('"]', "");
+      console.log(sel);
+      sel = sel.replaceAll('[data-id="', "#");
+      sel = sel.replaceAll('"]', "");
       let itemsList = sel.split(",");
+
+      console.log(itemsList);
       itemsList.forEach((el) => {
         let flow = this.parallelFLows.find((a) => {
           return a.flow == declaration.value.value.trim();

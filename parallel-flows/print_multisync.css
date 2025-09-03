@@ -1,0 +1,70 @@
+/* Parallel-flow demo css */
+:root {
+  --pagedjs-baseline: 16px;
+}
+body {
+  /* hyphens: auto; */
+  /* hyphenate-character: 10 10 4; */
+}
+
+section {
+  p:first-child {
+    margin-top: 0;
+  }
+}
+
+section p {
+  margin: 0;
+}
+
+@page {
+  margin: 10mm;
+  size: 200mm 210mm;
+  @bottom-center {
+    content: counter(page);
+  }
+}
+
+h2 {
+  margin-top: 0;
+}
+
+p {
+  line-height: 16px;
+}
+section {
+  break-before: page;
+}
+#chap-1-fr,
+#chap-2-fr,
+#chap-3-fr {
+  width: 40%;
+  margin-left: 0;
+}
+#chap-1-en,
+#chap-2-en,
+#chap-3-en {
+  background: orange;
+  width: 40%;
+  margin-left: auto;
+}
+
+/* why you can’t have , */
+
+#chap-1-en,
+#chap-1-fr {
+  --parallel-flow: orange;
+}
+
+#chap-2-fr {
+  --parallel-flow: beta;
+}
+#chap-2-en {
+  --parallel-flow: beta;
+}
+#chap-3-fr {
+  --parallel-flow: ceta;
+}
+#chap-3-en {
+  --parallel-flow: ceta;
+}
