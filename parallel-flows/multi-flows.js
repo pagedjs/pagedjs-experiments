@@ -95,21 +95,6 @@ class multilang extends Paged.Handler {
     if (!this.flowLocation == "samespread" || !this.flowLocation == "samepage")
       this.flowLocation = "samespread";
 
-    // let find a parallel-sync
-
-    if (declaration.property == "--parallel-sync") {
-      let sel = csstree.generate(rule.ruleNode.prelude);
-      sel = sel.replace('[data-id="', "#");
-      sel = sel.replace('"]', "");
-      let itemsList = sel.split(",");
-
-      console.log(declaration.value.value);
-
-      itemsList.forEach((el) => {
-        // this.parallelSync[]
-      });
-    }
-
     // if you find a parallel-flow
     if (declaration.property == "--parallel-flow") {
       let sel = csstree.generate(rule.ruleNode.prelude);
@@ -140,6 +125,7 @@ class multilang extends Paged.Handler {
       });
     }
 
+    //find parallel-sync
     if (declaration.property == "--paged-parallel-sync") {
       //record selectors
       let sel = csstree.generate(rule.ruleNode.prelude);
@@ -240,6 +226,10 @@ class multilang extends Paged.Handler {
       ).dataset.mainObjInFlow = "true";
 
       content
+        .querySelector(`[data-flow-id="${biggestHeightId}"]`)
+        .classList.add("main-parallel-flow");
+
+      content
         .querySelector(`[data-flowstart]`)
         .insertAdjacentElement(
           "beforebegin",
@@ -255,6 +245,30 @@ class multilang extends Paged.Handler {
       });
     });
     document.querySelector("#parallel-removeme").remove();
+
+    //find the sync element in the parallel
+    this.parallelSync.forEach((e) => {
+      e.synchro.forEach((sync) => {
+        //find for each flow the sync elements
+        // console.log(this.parallelFLows);
+
+        this.parallelFLows.forEach((plflow) => {
+          plflow.selectors.forEach((el) => {
+            console.log(el);
+            console.log(sync[0]);
+            content
+              .querySelectorAll(`${el.selector} ${sync[0]}`)
+              .forEach((elemented, index) => {
+                elemented.classList.add("syncmark");
+                elemented.classList.add(`sync-${index}`);
+              });
+          });
+        });
+      });
+
+      let main = e.synchro[0];
+      let secondary = e.synchro[1];
+    });
   }
 
   renderNode(node) {
@@ -412,7 +426,7 @@ class multilang extends Paged.Handler {
 
   afterRendered(pages) {
     console.warn(
-      "pagedjs is finished, any error here with next sibling or whatever will not impact us.",
+      "pagedjs is finished, any error here with next sibling or whatever will not impact us, it’s just a bit of complexity to find where / why is that come from",
     );
 
     this.parallelFLows.forEach((pflow) => {
@@ -433,6 +447,9 @@ class multilang extends Paged.Handler {
 
       if (this.flowLocation == "samepage") {
         guestsObj.forEach((guests) => {
+          //1. find the multiple sync marker
+          //2. check if the page contains the sync marker you’re looking for
+
           for (let i = 0; i < hostObj.length; i++) {
             if (hostObj[i] && guests[i]) {
               let obj = guests[i];
