@@ -60,7 +60,7 @@ section.b {
 section.c {
   width: 60ch;
   margin-left: auto;
-  --parallel-flow: beta;
+  --parallel-flow: alpha;
 }
 
 section.d {
@@ -98,5 +98,5 @@ section.a {
 }
 
 h3 {
-  --parallel-sync: beta all;
+  /* --parallel-sync: beta all; */
 }
