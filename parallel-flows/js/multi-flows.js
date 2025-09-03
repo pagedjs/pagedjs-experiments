@@ -29,8 +29,16 @@
 //     The CSS is the following:
 //
 //     ```
-//     .something {parallel-flow: alpha}
-//     .something-else {parallel-flow: alpha}
+//     .something {--paged-parallel-flow: alpha}
+//     .something-else {--paged-parallel-flow: alpha}
+//
+//     .something h3 {
+//     --paged-parallel-synchro: h3;
+//     }
+//
+//     .something #title-3 {
+//     --paged-parallel-synchro: #titre_3;
+//     }
 //     ```
 //
 //      If two elements have the same flow name, they will share a page or a spread, depending on the configuration below.
@@ -103,9 +111,10 @@ class multilang extends Paged.Handler {
       sel = sel.replace('"]', "");
       let itemsList = sel.split(",");
 
-      console.log(declaration.value.value);
+      // console.log(declaration.value.value);
 
       itemsList.forEach((el) => {
+        //el {--parallel-synx: parallel-flow-name parallel-flow-type}
         // this.parallelSync[]
       });
     }
@@ -413,13 +422,23 @@ class multilang extends Paged.Handler {
             if (hostObj[i] && guests[i]) {
               let obj = guests[i];
 
+              // i guess this is where you’d look for sync setting
+              // console.log(guests[i]);
+
               let pageToRemove = guests[i].closest(".pagedjs_page");
 
-              obj.style.left = `${obj.offsetLeft}px`;
-              obj.style.width = `${obj.offsetWidth}px`;
-              obj.style.top = `${obj.offsetTop}px`;
-              obj.style.height = `${obj.offsetHeight}px`;
+              //get the value before touching any of em
+              let left = obj.offsetLeft;
+              let width = obj.offsetWidth;
+              let top = obj.offsetTop;
+              let height = obj.offsetHeight;
+
+              // bring back values
+              obj.style.height = `${height}px`;
               obj.style.position = "absolute";
+              obj.style.left = `${left}px`;
+              obj.style.width = `${width}px`;
+              obj.style.top = `${top}px`;
 
               hostObj[i]
                 .closest(".pagedjs_page_content")
