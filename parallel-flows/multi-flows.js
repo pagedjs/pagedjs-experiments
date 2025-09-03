@@ -78,7 +78,7 @@ class multilang extends Paged.Handler {
     this.flowLocation = "samepage";
 
     // this.parallelFlows will find the flows from the css;
-    this.parallelFLows = [];
+    this.parallelFlows = [];
 
     // this.tracker will keep tack of the flows
     this.flowTracker = [];
@@ -105,13 +105,13 @@ class multilang extends Paged.Handler {
 
       console.log(itemsList);
       itemsList.forEach((el) => {
-        let flow = this.parallelFLows.find((a) => {
+        let flow = this.parallelFlows.find((a) => {
           return a.flow == declaration.value.value.trim();
         });
         if (flow) {
           flow.selectors.push({ selector: el, height: 0 });
         } else {
-          this.parallelFLows.push({
+          this.parallelFlows.push({
             flow: declaration.value.value.trim(),
             selectors: [{ selector: el, height: 0 }],
           });
@@ -127,41 +127,16 @@ class multilang extends Paged.Handler {
         this.parallelImpacts.push(el);
       });
     }
-
-    //find parallel-sync
-    if (declaration.property == "--paged-parallel-sync") {
-      //record selectors
-      let sel = csstree.generate(rule.ruleNode.prelude);
-      sel = sel.replace('[data-id="', "#");
-      sel = sel.replace('"]', "");
-      let itemsList = sel.split(",");
-
-      //record flow name
-      let flow = declaration.value.value.trim().split(" ")[0];
-
-      // record flow values as selectors
-      let synchro = declaration.value.value.trim().split(" ")[1];
-
-      let synchroList = [];
-      itemsList.forEach((el) => {
-        synchroList.push([sel, synchro]);
-      });
-
-      this.parallelSync.push({ flow: flow, synchro: synchroList });
-    }
   }
 
   beforeParsed(content, chunker) {
-    // this.parallel impacts
-    this.parallelImpacts.forEach((sel) => {
-      content.querySelectorAll(sel).forEach((el) => {
-        el.classList.add("parallel-impact");
-      });
-    });
+    //rebuild here the html to use the parallel-sync
+    // if there is a parallel-sync, for each flow, divide in block using the syncSelector
+    // and add them to the this.parallelFlows
 
-    this.parallelFLows.forEach((flow, index) => {
+    this.parallelFlows.forEach((flow, index) => {
       if (flow.selectors.length < 2) {
-        delete this.parallelFLows[index];
+        delete this.parallelFlows[index];
       }
       flow.selectors = flow.selectors.filter((e) =>
         content.querySelector(e.selector),
@@ -173,9 +148,9 @@ class multilang extends Paged.Handler {
     );
 
     // render the parallel flows
-    this.parallelFLows.forEach((flows, flowsIndex) => {
+    this.parallelFlows.forEach((flows, flowsIndex) => {
       //name of the flow
-      let flowName = this.parallelFLows[flowsIndex].flow;
+      let flowName = this.parallelFlows[flowsIndex].flow;
 
       // flow selectors
       flows.selectors.forEach((flow, selectorIndex) => {
@@ -253,9 +228,9 @@ class multilang extends Paged.Handler {
     this.parallelSync.forEach((e) => {
       e.synchro.forEach((sync) => {
         //find for each flow the sync elements
-        // console.log(this.parallelFLows);
+        // console.log(this.parallelFlows);
 
-        this.parallelFLows.forEach((plflow) => {
+        this.parallelFlows.forEach((plflow) => {
           plflow.selectors.forEach((el) => {
             console.log(el);
             console.log(sync[0]);
@@ -403,7 +378,7 @@ class multilang extends Paged.Handler {
 
     if (this.flowSpreadAddWhite) {
       if (page.querySelector("[data-main-obj-in-flow]")) {
-        this.parallelFLows.forEach(async (pflow) => {
+        this.parallelFlows.forEach(async (pflow) => {
           let newpage = this.chunker.addPage();
           newpage.element?.classList.add("addedpage");
           newpage.element?.classList.add("pagedjs_named_page");
@@ -432,7 +407,7 @@ class multilang extends Paged.Handler {
       "pagedjs is finished, any error here with next sibling or whatever will not impact us, it’s just a bit of complexity to find where / why is that come from",
     );
 
-    this.parallelFLows.forEach((pflow) => {
+    this.parallelFlows.forEach((pflow) => {
       let hostId = getBiggestHeight(pflow.selectors);
       let hostObj = document.querySelectorAll(hostId.selector);
       let guestIds = getAllButBiggestHeight(pflow.selectors);
