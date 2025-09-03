@@ -57,6 +57,7 @@ section.b {
   margin-left: auto;
 }
 
+/* how to manage parallel-flow*/
 section.c {
   width: 60ch;
   margin-left: auto;
@@ -97,6 +98,14 @@ section.a {
   }
 }
 
-h3 {
-  --parallel-sync: beta all;
+/* parallel sync only in certain flow*/
+h3,
+h2 {
+  /* --paged-parallel-sync: [flow identifier] [selectors] ; */
+  --paged-parallel-sync: beta h3;
+}
+
+h3#titre-3 {
+  /* --paged-parallel-sync: [flow identifier] [selectors] ; */
+  --paged-parallel-sync: alpha #title-3;
 }
