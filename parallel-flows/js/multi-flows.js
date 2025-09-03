@@ -162,18 +162,6 @@ class multilang extends Paged.Handler {
   beforeParsed(content, chunker) {
     // this parallelsync
 
-    this.parallelSync.forEach((parSync) => {
-      parSync.synchro.forEach((sync) => {
-        content.querySelectorAll(sync[0]).forEach((el) => {
-          el.dataset.parSync = sync[1];
-        });
-      });
-
-      // content.querySelectorAll(parSync).forEach((el) => {
-      // el.dataset.syncFlow
-      // });
-    });
-
     // this.parallel impacts
     this.parallelImpacts.forEach((sel) => {
       content.querySelectorAll(sel).forEach((el) => {
@@ -185,6 +173,7 @@ class multilang extends Paged.Handler {
       flow.selectors = flow.selectors.filter((e) =>
         content.querySelector(e.selector),
       );
+      //remove flow in css not used in html
       if (flow.selectors.length < 2) {
         delete this.parallelFLows[index];
       }
@@ -237,24 +226,15 @@ class multilang extends Paged.Handler {
         testedFlow.dataset.flowName = `${flowName}`;
       });
 
-      console.log(content.querySelectorAll(`.parallel-obj-${flowName}`));
       let parallelElements = Array.from(
         content.querySelectorAll(`.parallel-obj-${flowName}`),
       );
 
-      console.log(parallelElements);
-      let biggestHeightId = parallelElements.reduce((max, el) => {
-        console.log(parseInt(el.dataset.height));
-        console.log(parseInt(max.dataset.height));
-        console.log(parallelElements[0].dataset.flowId);
-        console.log(
+      let biggestHeightId = parallelElements.reduce(
+        (max, el) =>
           parseInt(el.dataset.height) > parseInt(max.dataset.height) ? el : max,
-        );
-        return (
-          parseInt(el.dataset.height) > parseInt(max.dataset.height) ? el : max,
-          parallelElements[0]
-        );
-      }).dataset.flowId;
+        parallelElements[0],
+      ).dataset.flowId;
 
       content.querySelector(
         `[data-flow-id="${biggestHeightId}"]`,
@@ -276,6 +256,44 @@ class multilang extends Paged.Handler {
       });
     });
     document.querySelector("#parallel-removeme").remove();
+
+    //parallel sync
+    this.parallelSync.forEach((parSync) => {
+      parSync.synchro.forEach((sync) => {
+        let syncMain = [
+          ...content.querySelectorAll(
+            `.parallel-obj-${parSync.flow} ${sync[0]}`,
+          ),
+        ].filter((e) => {
+          // console.log(e.closest("[data-main-obj-in-flow]"));
+          return e.closest("[data-main-obj-in-flow]");
+        });
+        let syncSecond = [
+          ...content.querySelectorAll(
+            `.parallel-obj-${parSync.flow} ${sync[1]}`,
+          ),
+        ].filter((e) => {
+          // console.log(e.closest("[data-main-obj-in-flow]"));
+          return !e.closest("[data-main-obj-in-flow]");
+        });
+
+        if (syncMain.length != syncSecond.length) {
+          return console.warn("there isn’t the same numbers of sync objects");
+        }
+
+        syncMain.forEach((el, index) => {
+          el.dataset.sync = `sync-${parSync.flow}-${index}`;
+        });
+
+        syncSecond.forEach((el, index) => {
+          el.dataset.sync = `sync-${parSync.flow}-${index}`;
+        });
+
+        content.querySelectorAll(sync[0]).forEach((el) => {
+          el.dataset.parSync = sync[1];
+        });
+      });
+    });
   }
 
   renderNode(node) {
@@ -446,43 +464,58 @@ class multilang extends Paged.Handler {
         guestsObj.push(document.querySelectorAll(gu.selector));
       });
 
-      let guests = [];
-
-      guestIds.forEach((selectors) => {
-        guests = [...document.querySelectorAll(hostId.selector)];
-      });
-
       if (this.flowLocation == "samepage") {
-        guestsObj.forEach((guests) => {
-          for (let i = 0; i < hostObj.length; i++) {
-            if (hostObj[i] && guests[i]) {
-              let obj = guests[i];
+        // make an array of the guestObj
+        const guestGroups = Array.from(guestsObj);
 
-              // i guess this is where you’d look for sync setting
-              // console.log(guests[i]);
+        // then for each
+        guestGroups.forEach((rawGroup, groupIndex) => {
+          // make an array of the guestObj
+          const guestGroup = Array.from(rawGroup); // Now it's a real array
 
-              let pageToRemove = guests[i].closest(".pagedjs_page");
+          for (let i = 0; i < guestGroup.length; i++) {
+            const guestEl = guestGroup[i];
+            const hostEl = hostObj[i];
 
-              //get the value before touching any of em
-              let left = obj.offsetLeft;
-              let width = obj.offsetWidth;
-              let top = obj.offsetTop;
-              let height = obj.offsetHeight;
+            // check if there are both
+            if (!guestEl || !hostEl) continue;
 
-              // bring back values
-              obj.style.height = `${height}px`;
-              obj.style.position = "absolute";
-              obj.style.left = `${left}px`;
-              obj.style.width = `${width}px`;
-              obj.style.top = `${top}px`;
+            //check for the datasynce
+            const guestPage = guestEl.closest(".pagedjs_page");
+            const syncEl = guestPage?.querySelector("[data-sync]");
 
-              hostObj[i]
+            if (!syncEl) continue;
+
+            // find the host datasync
+            const syncValue = syncEl.dataset.sync;
+            const hostHasSync = hostEl.querySelector(
+              `[data-sync="${syncValue}"]`,
+            );
+
+            if (hostHasSync) {
+              // Move guestEl into host, and use the deconstructing array
+              const { offsetLeft, offsetTop, offsetWidth, offsetHeight } =
+                guestEl;
+
+              guestEl.style.position = "absolute";
+              guestEl.style.left = `${offsetLeft}px`;
+              guestEl.style.top = `${offsetTop}px`;
+              guestEl.style.width = `${offsetWidth}px`;
+              guestEl.style.height = `${offsetHeight}px`;
+
+              const hostContent = hostEl
                 .closest(".pagedjs_page_content")
-                .querySelector("div")
-                .insertAdjacentElement("beforeend", obj);
+                ?.querySelector("div");
+              if (hostContent) {
+                hostContent.insertAdjacentElement("beforeend", guestEl);
+              }
 
-              // remove unused page
-              pageToRemove.remove();
+              // remove the page if there is one
+              guestPage?.remove();
+            } else {
+              const placeholder = document.createElement("section");
+              placeholder.classList.add("sync-placeholder");
+              guestGroup.splice(i, 0, placeholder);
             }
           }
         });

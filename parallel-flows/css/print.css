@@ -99,13 +99,8 @@ section.a {
 }
 
 /* parallel sync only in certain flow*/
-h3,
 h2 {
   /* --paged-parallel-sync: [flow identifier] [selectors] ; */
-  --paged-parallel-sync: beta h3;
-}
-
-h3#titre-3 {
-  /* --paged-parallel-sync: [flow identifier] [selectors] ; */
-  --paged-parallel-sync: alpha #title-3;
+  --paged-parallel-sync: alpha h2;
+  break-before: page;
 }
