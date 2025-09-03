@@ -170,7 +170,10 @@ class multilang extends Paged.Handler {
       });
     });
 
-    this.parallelFLows.forEach((flow) => {
+    this.parallelFLows.forEach((flow, index) => {
+      if (flow.selectors.length < 2) {
+        delete this.parallelFLows[index];
+      }
       flow.selectors = flow.selectors.filter((e) =>
         content.querySelector(e.selector),
       );
