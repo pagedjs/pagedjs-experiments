@@ -179,9 +179,15 @@ class multilang extends Paged.Handler {
             content.querySelector(flowEl.selector).innerHTML,
             parallelFlow.syncmarks.main,
             `${flowname}-${selectorIndex + 1}`,
+            content.querySelector(flowEl.selector).className,
+            content.querySelector(flowEl.selector).id,
           );
 
           content.querySelector(flowEl.selector).innerHTML = html;
+          content
+            .querySelector(flowEl.selector)
+            .insertAdjacentHTML("afterend", html);
+          content.querySelector(flowEl.selector).remove();
 
           ids.forEach((sel) => {
             sel = [{ flow: sel, height: 0 }];
@@ -630,7 +636,13 @@ function createOverlapElement(overlap, box2element, offset = 16, id) {
   box2element.insertAdjacentElement("afterbegin", overlapElement);
 }
 
-function splitHtmlByDelimiter(htmlString, splitSelector, flowName = "group") {
+function splitHtmlByDelimiter(
+  htmlString,
+  splitSelector,
+  flowName = "group",
+  classes,
+  dataId,
+) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(`<div>${htmlString}</div>`, "text/html");
   const container = doc.body.firstChild;
@@ -658,8 +670,10 @@ function splitHtmlByDelimiter(htmlString, splitSelector, flowName = "group") {
   const generatedIds = [];
 
   result.forEach((group, index) => {
-    const wrapper = document.createElement("div");
+    const wrapper = document.createElement("section");
     const id = `${flowName}-${index}`;
+    wrapper.className = classes ? classes : "";
+    wrapper.dataset.id = dataId ? dataId : "";
     wrapper.classList.add(id);
     generatedIds.push(id);
     group.forEach((node) => wrapper.appendChild(node));
