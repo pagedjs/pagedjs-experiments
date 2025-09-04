@@ -159,7 +159,6 @@ class multilang extends Paged.Handler {
         this.parallelFlows[flowtoupdate].syncmarks = sync.syncmarks;
       }
     });
-    // now, let’s update the flows to divide all the element of each flow using their h2, and create a parallelflow for each of them on the fly
 
     // console.log(this.parallelFlows);
     this.parallelFlows.forEach((parallelFlow, flowindex) => {
@@ -181,6 +180,7 @@ class multilang extends Paged.Handler {
             `${flowname}-${selectorIndex + 1}`,
             content.querySelector(flowEl.selector).className,
             content.querySelector(flowEl.selector).id,
+            content.querySelector(flowEl.selector).tagName,
           );
 
           content.querySelector(flowEl.selector).innerHTML = html;
@@ -234,6 +234,14 @@ class multilang extends Paged.Handler {
       }
     });
 
+    // set the parallel impacts
+    this.parallelImpacts.forEach((sel) => {
+      content.querySelectorAll(sel).forEach((el) => {
+        el.classList.add("parallel-impact");
+      });
+    });
+
+    //set the rest
     this.parallelFlows.forEach((flow, index) => {
       if (flow.selectors.length < 2) {
         delete this.parallelFlows[index];
@@ -642,6 +650,7 @@ function splitHtmlByDelimiter(
   flowName = "group",
   classes,
   dataId,
+  elementtype = "section",
 ) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(`<div>${htmlString}</div>`, "text/html");
@@ -670,7 +679,7 @@ function splitHtmlByDelimiter(
   const generatedIds = [];
 
   result.forEach((group, index) => {
-    const wrapper = document.createElement("section");
+    const wrapper = document.createElement(elementtype);
     const id = `${flowName}-${index}`;
     wrapper.className = classes ? classes : "";
     wrapper.dataset.id = dataId ? dataId : "";

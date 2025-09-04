@@ -51,7 +51,7 @@ section.b {
   page: section-b;
   border-right: 2em solid red;
   width: 60mm;
-  margin-left: 80mm;
+  margin-left: auto;
   color: orange;
 }
 
@@ -73,4 +73,10 @@ section {
 h2 {
   /* /* --paged-parallel-sync: alpha, .parallel flow h2, .another parallel flow selector h2; maybe in the future */
   --paged-parallel-sync: alpha h2;
+}
+
+#porco {
+  width: 200%;
+  height: auto;
+  --parallel-impact: all;
 }
