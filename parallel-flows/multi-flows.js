@@ -98,12 +98,10 @@ class multilang extends Paged.Handler {
     // if you find a parallel-flow
     if (declaration.property == "--parallel-flow") {
       let sel = csstree.generate(rule.ruleNode.prelude);
-      console.log(sel);
       sel = sel.replaceAll('[data-id="', "#");
       sel = sel.replaceAll('"]', "");
       let itemsList = sel.split(",");
 
-      console.log(itemsList);
       itemsList.forEach((el) => {
         let flow = this.parallelFlows.find((a) => {
           return a.flow == declaration.value.value.trim();
@@ -127,12 +125,108 @@ class multilang extends Paged.Handler {
         this.parallelImpacts.push(el);
       });
     }
+
+    // get parallel sync
+    if (declaration.property == "--paged-parallel-sync") {
+      let sel = csstree.generate(rule.ruleNode.prelude).trim();
+      sel = sel.replaceAll('[data-id="', "#");
+      sel = sel.replaceAll('"]', "");
+      let itemsList = sel.split(",");
+
+      let values = declaration.value.value.trim().split(" ");
+
+      itemsList.forEach((el) => {
+        this.parallelSync.push({
+          flow: values[0],
+          syncmarks: { main: el, second: values[1] },
+        });
+      });
+    }
   }
 
-  beforeParsed(content, chunker) {
-    //rebuild here the html to use the parallel-sync
-    // if there is a parallel-sync, for each flow, divide in block using the syncSelector
-    // and add them to the this.parallelFlows
+  async beforeParsed(content, chunker) {
+    // this.parallelFlows.push({
+    //    flow: "find the name of the flow",
+    //    selectors: [{ selector: #id of each block, height: 0 }],
+    //  });
+    //for each flows, find if there is a need for a sync
+    this.parallelSync.forEach((sync) => {
+      let flowtoupdate = this.parallelFlows.findIndex(
+        (flow) => flow.flow === sync.flow,
+      );
+
+      if (flowtoupdate !== -1) {
+        this.parallelFlows[flowtoupdate].syncmarks = sync.syncmarks;
+      }
+    });
+    // now, let’s update the flows to divide all the element of each flow using their h2, and create a parallelflow for each of them on the fly
+
+    // console.log(this.parallelFlows);
+    this.parallelFlows.forEach((parallelFlow, flowindex) => {
+      let newParallelFlows = [];
+      if (parallelFlow.syncmarks) {
+        let results = [];
+        let flowname = parallelFlow.flow;
+
+        let newSelectors = [];
+        parallelFlow.selectors.forEach((flowEl, selectorIndex) => {
+          // pour chaque flow, retrouver les separations
+          //
+          // et pour chaque separation, créer un nouveau flow à rajouter aux parallelflows
+
+          let { html, ids } = splitHtmlByDelimiter(
+            //htmlstring, splitselector
+            content.querySelector(flowEl.selector).innerHTML,
+            parallelFlow.syncmarks.main,
+            `${flowname}-${selectorIndex + 1}`,
+          );
+
+          content.querySelector(flowEl.selector).innerHTML = html;
+
+          ids.forEach((sel) => {
+            sel = [{ flow: sel, height: 0 }];
+          });
+
+          newSelectors.push(ids);
+
+          // remix the selectors to build the newwest parallellines
+          results = mixArrays(...newSelectors);
+        });
+
+        //new flow
+        // new flow = {flow, selectors: [{selector: newSelector, height:0}]}
+
+        console.log(this.parallelFlows);
+        console.log(results);
+
+        results.forEach((res, index) => {
+          let flowName = `new${parallelFlow.flow}${index}`;
+          let selectors = [];
+
+          res.forEach((thin, index) => {
+            selectors.push({ selector: [`.${thin}`], height: 0 });
+          });
+
+          console.log("sel", selectors);
+
+          newParallelFlows.push({
+            oldflow: parallelFlow.flow,
+            flow: flowName,
+            selectors: selectors,
+          });
+        });
+
+        let flowIndex = this.parallelFlows.findIndex(
+          (i) => i.flow == newParallelFlows[0].oldflow,
+        );
+
+        this.parallelFlows.splice(flowIndex, 1, ...newParallelFlows);
+
+        //remove all syncmark from parallelflows obj
+        // ou plutôt, remplace le par les nouveaux flows
+        // this.parallelFlows = this.parallelFlows.filter((el) => !el.syncmarks);
+      }
+    });
 
     this.parallelFlows.forEach((flow, index) => {
       if (flow.selectors.length < 2) {
@@ -226,14 +320,9 @@ class multilang extends Paged.Handler {
 
     //find the sync element in the parallel
     this.parallelSync.forEach((e) => {
-      e.synchro.forEach((sync) => {
-        //find for each flow the sync elements
-        // console.log(this.parallelFlows);
-
+      e.synchro?.forEach((sync) => {
         this.parallelFlows.forEach((plflow) => {
           plflow.selectors.forEach((el) => {
-            console.log(el);
-            console.log(sync[0]);
             content
               .querySelectorAll(`${el.selector} ${sync[0]}`)
               .forEach((elemented, index) => {
@@ -244,8 +333,8 @@ class multilang extends Paged.Handler {
         });
       });
 
-      let main = e.synchro[0];
-      let secondary = e.synchro[1];
+      // let main = e.synchro[0];
+      // let secondary = e.synchro[1];
     });
   }
 
@@ -539,4 +628,58 @@ function createOverlapElement(overlap, box2element, offset = 16, id) {
   overlapElement.dataset.id = id;
 
   box2element.insertAdjacentElement("afterbegin", overlapElement);
+}
+
+function splitHtmlByDelimiter(htmlString, splitSelector, flowName = "group") {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(`<div>${htmlString}</div>`, "text/html");
+  const container = doc.body.firstChild;
+
+  const children = Array.from(container.childNodes);
+  const result = [];
+  let currentGroup = [];
+
+  children.forEach((child) => {
+    if (child.nodeType === Node.ELEMENT_NODE && child.matches(splitSelector)) {
+      if (currentGroup.length > 0) {
+        result.push(currentGroup);
+      }
+      currentGroup = [child]; // start new group with delimiter
+    } else {
+      currentGroup.push(child);
+    }
+  });
+
+  if (currentGroup.length > 0) {
+    result.push(currentGroup);
+  }
+
+  const outputContainer = document.createElement("div");
+  const generatedIds = [];
+
+  result.forEach((group, index) => {
+    const wrapper = document.createElement("div");
+    const id = `${flowName}-${index}`;
+    wrapper.classList.add(id);
+    generatedIds.push(id);
+    group.forEach((node) => wrapper.appendChild(node));
+    outputContainer.appendChild(wrapper);
+  });
+
+  return {
+    html: outputContainer.innerHTML,
+    ids: generatedIds,
+  };
+}
+
+function mixArrays(...arrays) {
+  const length = arrays[0].length;
+  const result = [];
+
+  for (let i = 0; i < length; i++) {
+    const group = arrays.map((arr) => arr[i]);
+    result.push(group);
+  }
+
+  return result;
 }

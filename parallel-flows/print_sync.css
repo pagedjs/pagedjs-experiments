@@ -68,9 +68,7 @@ section.d h1 {
 }
 
 h2 {
-  --paged-parallel-sync: alpha h2;
-}
-
-h2 {
   break-before: page;
+  /* /* --paged-parallel-sync: alpha, .parallel flow h2, .another parallel flow selector h2; maybe in the future */
+  /* --paged-parallel-sync: alpha h2; */
 }
