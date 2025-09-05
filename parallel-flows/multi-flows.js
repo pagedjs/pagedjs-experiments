@@ -118,8 +118,8 @@ class multilang extends Paged.Handler {
     }
     if (declaration.property == "--parallel-impact") {
       let sel = csstree.generate(rule.ruleNode.prelude);
-      sel = sel.replace('[data-id="', "#");
-      sel = sel.replace('"]', "");
+      sel = sel.replaceAll('[data-id="', "#");
+      sel = sel.replaceAll('"]', "");
       let itemsList = sel.split(",");
       itemsList.forEach((el) => {
         this.parallelImpacts.push(el);
