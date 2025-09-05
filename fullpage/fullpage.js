@@ -26,7 +26,12 @@ class fullpage extends Paged.Handler {
       content.querySelectorAll(fp.element).forEach((el) => {
         el.classList.add(`paged-${fp.type}`);
         el.dataset.pagedFullpage = fp.type;
+
+        // hide the element with css
         el.style.position = "absolute";
+        el.style.display = "none";
+        el.style.height = "0px";
+        el.style.overflow = "hidden";
       });
     });
   }
@@ -49,6 +54,12 @@ class fullpage extends Paged.Handler {
         newpage.element.classList.add("addedpage");
         newpage.element.classList.add("pagedjs_named_page");
         newpage.element.classList.add("pagedjs-fullpage_page");
+
+        // reshow the element
+        el.style.position = "absolute";
+        el.style.display = "initial";
+        el.style.height = "initial";
+        el.style.overflow = "initial";
 
         newpage.area.appendChild(el);
 
