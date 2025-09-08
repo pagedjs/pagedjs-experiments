@@ -58,7 +58,6 @@ class floatSame extends Paged.Handler {
     page.querySelectorAll(".paged-to-float").forEach((tomove) => {
       switch (tomove.dataset.toFloat) {
         case "same-bottom":
-          console.log("samebottom");
           page
             .querySelector(".pagedjs_page_content div")
             .insertAdjacentElement("beforeend", tomove);

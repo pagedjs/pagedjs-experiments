@@ -1,3 +1,6 @@
+:root {
+  --pagedjs-baseline-color: transparent;
+}
 .tuto {
   color: rebeccapurple;
   padding-right: 40ch;
@@ -11,7 +14,17 @@
   right: -20mm;
 }
 
+img {
+  display: block;
+  margin: 0;
+  margin-bottom: 1.2em;
+}
 #push-to-top,
+#dance-what {
+  --paged-page-float: same-top;
+}
+
+#push-to-bottom,
 #dance-what {
   --paged-page-float: same-bottom;
 }
