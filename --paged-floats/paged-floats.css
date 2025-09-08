@@ -1,0 +1,17 @@
+.tuto {
+  color: rebeccapurple;
+  padding-right: 40ch;
+  margin-bottom: 20mm;
+}
+
+.location {
+  color: purple;
+  width: 20mm;
+  position: absolute;
+  right: -20mm;
+}
+
+#push-to-top,
+#dance-what {
+  --paged-page-float: same-bottom;
+}
