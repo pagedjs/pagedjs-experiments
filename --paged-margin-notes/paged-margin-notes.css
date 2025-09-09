@@ -57,3 +57,15 @@ p {
 }
 .renvoiBlock .hugo-cite-citation {
 }
+
+.note-callout {
+  color: red;
+  font-size: 2em;
+  line-height: 0;
+}
+
+.note-marker {
+  color: red;
+  font-size: 2em;
+  line-height: 0;
+}

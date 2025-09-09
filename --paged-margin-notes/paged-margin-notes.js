@@ -31,9 +31,7 @@ class pagedjsNotes extends Paged.Handler {
     this.pagedMarginNotes.forEach((note) => {
       content.querySelectorAll(note.selector).forEach((noteelement) => {
         noteelement.classList.add("paged-margin-note");
-        noteelement.classList.add("chaussette");
-        noteelement.style.position = "absolute";
-        noteelement.style.zIndex = "4";
+        noteelement.classList.add("pagednote");
         noteelement.dataset.noteId = `${note.selector.replace(".", "").replace("#", "")}-${note.location}`;
         noteelement.dataset.pagedMarginNoteLocation = `${note.location}`;
         notes.push(noteelement);
@@ -44,12 +42,10 @@ class pagedjsNotes extends Paged.Handler {
     for (let i = 0; i < notes.length; ++i) {
       //spancall
       let spanCall = document.createElement("span");
-      spanCall.classList.add("note-call");
+      spanCall.classList.add("note-callout");
       spanCall.classList.add("note-call_" + notes[i].dataset.noteId);
-      spanCall.dataset.noteCall = notes[i].dataset.noteId + "-" + i + 1;
       spanCall.dataset.noteCounter = i;
       spanCall.innerHTML = i + 1;
-      console.log("i", notes[i]);
       notes[i].insertAdjacentElement("beforebegin", spanCall);
 
       // Add marker notes
@@ -68,7 +64,7 @@ class pagedjsNotes extends Paged.Handler {
     const blockThingy = document.createElement("div");
     blockThingy.classList.add("renvoiBlock");
 
-    let pageElements = page.querySelectorAll(".chaussette");
+    let pageElements = page.querySelectorAll(".pagednote");
 
     pageElements.forEach((el, index) => {
       console.log(el);
