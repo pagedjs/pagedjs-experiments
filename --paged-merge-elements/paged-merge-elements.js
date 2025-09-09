@@ -1,6 +1,16 @@
 /*script to do stuff, please comment*/
 
-class changeMeName extends Paged.Handler {
+/*using the -paged-merge property, you can merge two elements:
+ *
+ *  .selector {
+ *      --paged-merge: #item-to-merge
+ *  }
+ *
+ * this will create an element just before the `.selector` that will contain the `.selector` and the items `#item-to-merge`
+ *
+ * */
+
+class mergeElements extends Paged.Handler {
   constructor(chunker, polisher, caller) {
     super(chunker, polisher, caller);
     this.pagedMerge = [];
@@ -58,4 +68,4 @@ class changeMeName extends Paged.Handler {
 }
 
 // check for problem
-Paged.registerHandlers(changeMeName);
+Paged.registerHandlers(mergeElements);
