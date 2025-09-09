@@ -1,11 +1,7 @@
-// const lookingFor = ".marginnotes";
-
-// let classNotes = lookingFor; // ← Change the CLASS of the notes here
-// let notesFloat = "right"; // ← Change the POSITION of the notes here
-
-class marginNotes extends Paged.Handler {
+class pagedjsNotes extends Paged.Handler {
   constructor(chunker, polisher, caller) {
     super(chunker, polisher, caller);
+
     this.pagedMarginNotes = [];
   }
 
@@ -27,28 +23,33 @@ class marginNotes extends Paged.Handler {
     }
   }
 
+  // TODO: make that one work
+  //
   beforeParsed(content) {
     let notes = [];
     // find the notes and apply a class AND a marginnote location
     this.pagedMarginNotes.forEach((note) => {
       content.querySelectorAll(note.selector).forEach((noteelement) => {
         noteelement.classList.add("paged-margin-note");
-        noteelement.dataset.noteId = `${note.selector}-${note.location}`;
-        noteelement.dataset.pagedMarginNoteLocation = `paged-${note.location}`;
-        generateStylesForNotes(note.location, note.selector);
+        noteelement.classList.add("chaussette");
+        noteelement.style.position = "absolute";
+        noteelement.style.zIndex = "4";
+        noteelement.dataset.noteId = `${note.selector.replace(".", "").replace("#", "")}-${note.location}`;
+        noteelement.dataset.pagedMarginNoteLocation = `${note.location}`;
+        notes.push(noteelement);
       });
     });
 
-    // add the number for the callout and the number for the marker
-    if (notes.length <= 0) return;
-
     // add note marker and note callout
     for (let i = 0; i < notes.length; ++i) {
-      var spanCall = document.createElement("span");
+      //spancall
+      let spanCall = document.createElement("span");
       spanCall.classList.add("note-call");
       spanCall.classList.add("note-call_" + notes[i].dataset.noteId);
       spanCall.dataset.noteCall = notes[i].dataset.noteId + "-" + i + 1;
+      spanCall.dataset.noteCounter = i;
       spanCall.innerHTML = i + 1;
+      console.log("i", notes[i]);
       notes[i].insertAdjacentElement("beforebegin", spanCall);
 
       // Add marker notes
@@ -56,219 +57,150 @@ class marginNotes extends Paged.Handler {
       spanMarker.classList.add("note-marker");
       spanMarker.classList.add("note-marker_" + notes[i].dataset.noteId);
       spanMarker.dataset.noteMarker = notes[i].dataset.noteId + "-" + i + 1;
-      spanMarker.dataset.noteNumbe = i + 1;
-      spanMarker.innerHTML = i + 1;
+      spanMarker.dataset.noteCounter = i + 1;
+      spanMarker.innerHTML = `${i + 1}.`;
+      spanMarker.dataset.noteCounter = i;
       notes[i].insertAdjacentElement("afterbegin", spanMarker);
-
-      // Hide notes to avoid rendering problems
-      // notes[i].style.display = "none";
     }
-
-    /* NOTE experimental mergeFLOAT ---------------------------------------------------------------------------------- */
-
-    // need to change that to use the info in the css
   }
 
-  // now let’s move things on the page (or should we wait)
-  finalizePage(pageElement, pagemeta, breakToken) {
-    let notes = pageElement.querySelectorAll(".paged-margin-notes");
-    let noteOverflow = false;
+  async finalizePage(page) {
+    const blockThingy = document.createElement("div");
+    blockThingy.classList.add("renvoiBlock");
 
-    let notesHeightAll = [];
+    let pageElements = page.querySelectorAll(".chaussette");
 
-    if (typeof notes != "undefined" && notes != null && notes.length != 0) {
-      for (let n = 0; n < notes.length; ++n) {
-        // Display notes of the page
-        notes[n].style.display = "inline-block";
-        // Add height of the notes to array notesHeightAll
-        let noteHeight = notes[n].offsetHeight;
-        notesHeightAll.push(noteHeight);
-        // Add margins of the notes to array notesHeightAll
-        if (n >= 1) {
-          let margins = biggestMargin(notes[n - 1], notes[n]);
-          notesHeightAll.push(margins);
+    pageElements.forEach((el, index) => {
+      console.log(el);
+      if (el.previousElementSibling) {
+        el.previousElementSibling.dataset.offsetTop =
+          el.previousElementSibling?.offsetTop;
+      }
+      el.dataset.offsetTop = el.offsetTop;
+      let offset = 0;
+      el.style.top = el.dataset.offsetTop - offset + "px";
+      el.style.position = "absolute";
+      blockThingy.insertAdjacentElement("beforeend", el);
+    });
+
+    page
+      .querySelector(".pagedjs_page_content")
+      .insertAdjacentElement("beforeend", blockThingy);
+
+    // try to move things here
+    //  once the page is done, check the whole thing
+
+    const allnotes = page.querySelectorAll(".chaussette");
+
+    //height of all the notes
+    const pageHeight = page.querySelector(".pagedjs_page_content").offsetHeight;
+    let noteHeight = 0;
+
+    allnotes.forEach((note) => {
+      noteHeight += note.offsetHeight;
+    });
+
+    // add check to see when there is more note than page height so the author can make a decision.
+    if (noteHeight > pageHeight) {
+      allnotes.forEach((note) => {
+        note.style.position = "unset";
+        note.style.marginBottom = ".3em";
+        note.style.color = "green";
+      });
+    }
+
+    // move notes bottom when they touch each others.
+    // add some text indent to the note? or reverse text indent?
+    allnotes.forEach((el) => {
+      let previousNote = el.previousElementSibling;
+      if (previousNote) {
+        if (
+          previousNote?.offsetTop + previousNote?.offsetHeight >=
+          el.offsetTop
+        ) {
+          // put them in the same div and manage the couples of notes with the div.
+          el.classList.add("overlap");
+          el.dataset.topLocation =
+            previousNote.offsetTop + previousNote.offsetHeight;
+          el.style.top = el.dataset.topLocation + "px";
+          // console.log(page.querySelector(".pagedjs_page_content").offsetHeight)
         }
       }
+    });
 
-      /* FIT PAGE ------------------------------------------------------------------------------------- */
+    //check if the notes goes too down
+    //
 
-      // Calculate if all notes fit on the page;
-      let reducer = (accumulator, currentValue) => accumulator + currentValue;
-      let allHeight = notesHeightAll.reduce(reducer);
-      let maxHeight = pageElement.querySelectorAll(".pagedjs_page_content")[0]
-        .offsetHeight;
+    // if there is not note get back
+    if (allnotes.length == 0) return;
 
-      if (allHeight > maxHeight) {
-        /* IF DOESN'T FIT ----------------------------------------------------------------------------- */
+    let lastnote = [...allnotes].pop();
 
-        // positions all the notes one after the other starting from the top
-        notes[0].style.top =
-          parseInt(window.getComputedStyle(notes[0]).marginBottom, 10) * -1 +
-          "px";
-        for (let a = 1; a < notes.length; ++a) {
-          let notePrev = notes[a - 1];
-          let newMargin = biggestMargin(notePrev, notes[a]);
-          let newTop =
-            notePrev.offsetTop +
-            notePrev.offsetHeight -
-            marginNoteTop(notes[a]) +
-            newMargin;
-          notes[a].style.top = newTop + "px";
-        }
-        // alert
-        let pageNumber = pageElement.dataset.pageNumber;
-        alert(
-          "Rendering issue \n ☞ A marginal note overflow on page " +
-            pageNumber +
-            " (this is because there is too many on this page and paged.js can't breaks notes between pages for now.)",
-        );
-        noteOverflow = true;
-      } else {
-        /* PUSH DOWN ---------------------------------------------------- */
-        for (let i = 0; i < notes.length; ++i) {
-          if (i >= 1) {
-            let noteTop = notes[i].offsetTop;
-            let notePrev = notes[i - 1];
-            let newMargin = biggestMargin(notes[i], notePrev);
-            let notePrevBottom =
-              notePrev.offsetTop -
-              marginNoteTop(notePrev) +
-              notePrev.offsetHeight +
-              newMargin;
-            // Push down the note to bottom if it's over the previous one
-            if (notePrevBottom > noteTop) {
-              notes[i].style.top = notePrevBottom + "px";
-            }
-          }
-        }
+    // check if page overflow
+    let pageOverflow =
+      Number(lastnote.offsetHeight) + Number(lastnote.dataset.offsetTop);
 
-        /* PUSH UP ---------------------------------------------- */
-
-        // Height of the page content
-        let contentHeight = pageElement
-          .querySelectorAll(".pagedjs_page_content")[0]
-          .querySelectorAll("div")[0].offsetHeight;
-
-        // Check if last note overflow
-        let nbrLength = notes.length - 1;
-        let lastNote = notes[nbrLength];
-        let lastNoteHeight = lastNote.offsetHeight + marginNoteTop(lastNote);
-        let noteBottom = lastNote.offsetTop + lastNoteHeight;
-
-        if (noteBottom > contentHeight) {
-          // Push up the last note
-          lastNote.style.top = contentHeight - lastNoteHeight + "px";
-
-          // Push up previous note(s) if if it's over the note
-          for (let i = nbrLength; i >= 1; --i) {
-            let noteLastTop = notes[i].offsetTop;
-            let notePrev = notes[i - 1];
-            let notePrevHeight = notePrev.offsetHeight;
-            let newMargin = biggestMargin(notePrev, notes[i]);
-            let notePrevBottom =
-              notePrev.offsetTop + notePrev.offsetHeight + newMargin;
-            if (notePrevBottom > noteLastTop) {
-              notePrev.style.top =
-                notes[i].offsetTop -
-                marginNoteTop(notePrev) -
-                notePrevHeight -
-                newMargin +
-                "px";
-            }
-          }
-        } /* end push up */
+    if (pageOverflow > pageHeight) {
+      //put the last note at the bottom and check the height to push up anything touching.
+      lastnote.style.top = "unset";
+      lastnote.style.bottom = 0;
+      //while last note overlap the previous note
+      while (
+        lastnote.offsetTop <
+        lastnote.previousElementSibling?.offsetHeight +
+          lastnote.previousElementSibling?.offsetTop
+      ) {
+        lastnote.previousElementSibling.style.top = "unset";
+        lastnote.previousElementSibling.style.bottom =
+          lastnote.offsetHeight + 8 + "px";
+        lastnote = lastnote.previousElementSibling;
       }
     }
-  } /* end afterPageLayout*/
-}
-Paged.registerHandlers(marginNotes);
-
-/* FUNCTIONS -------------------------------------------------------------------------------------- 
---------------------------------------------------------------------------------------------------- */
-
-// MARGINS
-
-function marginNoteTop(elem) {
-  let marginTop = parseInt(window.getComputedStyle(elem).marginTop, 10);
-  return marginTop;
-}
-
-function marginNoteBottom(elem) {
-  let marginBottom = parseInt(window.getComputedStyle(elem).marginBottom, 10);
-  return marginBottom;
-}
-
-function biggestMargin(a, b) {
-  let margin;
-  let marginBottom = marginNoteBottom(a);
-  let marginTop = marginNoteTop(b);
-  if (marginBottom > marginTop) {
-    margin = marginBottom;
-  } else {
-    margin = marginTop;
   }
-  return margin;
-}
 
-// ADD CSS
-
-function addcss(cssstring) {
-  var head = document.getElementsByTagName("head")[0];
-  var s = document.createElement("style");
-  s.setAttribute("type", "text/css");
-  if (s.styleSheet) {
-    // IE
-    s.styleSheet.cssText = cssstring;
-  } else {
-    // the world
-    s.appendChild(document.createTextNode(cssstring));
+  afterRendered(pages) {
+    console.log("did some notes!");
   }
-  head.appendChild(s);
 }
+Paged.registerHandlers(pagedjsNotes);
 
-// CAMEL CLASS NOTE
+/* No hyphens between pages */
+/* warning : may cause polyfill errors */
 
-function toCamelClassNote(elem) {
-  let splitClass = elem.split("-");
-  if (splitClass.length > 1) {
-    for (let s = 1; s < splitClass.length; ++s) {
-      let strCapilize =
-        splitClass[s].charAt(0).toUpperCase() + splitClass[s].slice(1);
-      splitClass[s] = strCapilize;
+class noHyphenBetweenPage extends Paged.Handler {
+  constructor(chunker, polisher, caller) {
+    super(chunker, polisher, caller);
+    this.hyphenToken;
+  }
+
+  afterPageLayout(pageFragment, page, breakToken) {
+    if (pageFragment.querySelector(".pagedjs_hyphen")) {
+      // find the hyphenated word
+      let block = pageFragment.querySelector(".pagedjs_hyphen");
+
+      // i dont know what that line was for :thinking: i removed it
+      // block.dataset.ref = this.prevHyphen;
+
+      // move the breakToken
+      let offsetMove = getFinalWord(block.innerHTML).length;
+
+      // move the token accordingly
+      page.breakToken = page.endToken.offset - offsetMove;
+
+      // remove the last word
+      block.innerHTML = block.innerHTML.replace(
+        getFinalWord(block.innerHTML),
+        "",
+      );
+
+      breakToken.offset = page.endToken.offset - offsetMove;
     }
   }
-  let reducer = (accumulator, currentValue) => accumulator + currentValue;
-  let classCamel = splitClass.reduce(reducer);
-  return classCamel;
 }
 
-function generateStylesForNotes(marginLocation, noteSelector) {
-  // set the style for the position. But maybe, it would be bettter to set their location with styles?
-  // or from the css?
-  let positionRight =
-    "left: calc(var(--pagedjs-pagebox-width) - var(--pagedjs-margin-left) - var(--pagedjs-margin-right) - 1px); width: var(--pagedjs-margin-right);";
-  let positionLeft =
-    "left: calc(var(--pagedjs-margin-left)*-1 - 1px); width: var(--pagedjs-margin-left);";
+// Paged.registerHandlers(noHyphenBetweenPage);
 
-  let notePosition;
-
-  switch (marginLocation) {
-    case "inside":
-      notePosition = `.pagedjs_left_page ${noteSelector} { ${positionRight} } .pagedjs_right_page ${noteSelector}{ ${positionLeft} }`;
-      break;
-
-    case "left":
-      notePosition = `.pagedjs_left_page ${noteSelector} {${positionLeft} } .pagedjs_right_page ${noteSelector}  {${positionLeft}}`;
-      break;
-    case "right":
-      notePosition = `.pagedjs_left_page ${noteSelector} {${positionRight} } .pagedjs_right_page ${noteSelector}  {${positionRight}}`;
-      break;
-
-    default:
-      notePosition = `.pagedjs_left_page ${noteSelector} {${positionLeft} } .pagedjs_right_page ${noteSelector}  {${positionRight}}`;
-  }
-
-  addcss(
-    `body { counter-reset: callNote_${toCamelClassNote(noteSelector)} markerNote_${toCamelClassNote(noteSelector)}; } ${noteSelector} { position: absolute; text-align-last: initial; box-sizing: border-box; } .note-call${noteSelector} { counter-increment: callNote_${toCamelClassNote(noteSelector)}  ; } .note-call${noteSelector}::after { content: counter(callNote_${toCamelClassNote(noteSelector)}); } .note-marker${noteSelector} { counter-increment: markerNote_${toCamelClassNote(noteSelector)}; } .note-marker${noteSelector}::before { content: counter(markerNote_${toCamelClassNote(noteSelector)}); } ${notePosition} `,
-  );
+function getFinalWord(words) {
+  var n = words.split(" ");
+  return n[n.length - 1];
 }
