@@ -1,0 +1,27 @@
+body {
+  color: purple;
+}
+
+@page {
+  margin: 20mm 40mm 10mm 40mm;
+}
+
+:root {
+  --baseline: 16px;
+}
+
+p {
+  line-height: 16px;
+  margin: 0;
+  margin-bottom: 16px;
+  text-indent: 3em;
+}
+
+.note {
+  color: pink;
+}
+
+.note-outside {
+  color: orange;
+  --paged-margin-notes: outside;
+}
