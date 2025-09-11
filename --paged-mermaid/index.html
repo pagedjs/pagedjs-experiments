@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>cinéma total</title>
+
+    <script src="../js/csstree.js"></script>
+    <script src="../js/paged.polyfill.js"></script>
+    <script src="../js/reload-in-place.js"></script>
+    <link href="../css/interface.css" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="./paged-mermaid.css" />
+    <script type="module" src="./paged-mermaid.js"></script>
+  </head>
+
+  <body>
+    <section class="chapter">
+      <pre class="mermaid">
+         graph TD
+        A[Début] --> B{Choix ?}
+        B -- Oui --> C[Action 1]
+        B -- Non --> D[Action 2]
+        C --> E[Fin]
+        D --> E      </pre
+      >
+    </section>
+  </body>
+</html>

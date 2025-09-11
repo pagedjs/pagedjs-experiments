@@ -1,0 +1,17 @@
+*,
+* * {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  color: orange;
+}
+
+.mermaid {
+  padding: 2em;
+  width: 100%;
+  height: 30mm;
+  background: red;
+}
