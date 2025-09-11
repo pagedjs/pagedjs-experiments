@@ -1,19 +1,13 @@
+//import mermaid.js
 import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
-
-console.log("yo");
 
 //run mermaid.js
 class pagedjsNotes extends Paged.Handler {
   constructor(chunker, polisher, caller) {
     super(chunker, polisher, caller);
-
-    this.pagedMarginNotes = [];
   }
 
-  onDeclaration(declaration, dItem, dList, rule) {}
-
-  // TODO: make that one work
-  //
+  //beforeParsed happens before paged.js do anything, but after the css has been read.
   async beforeParsed(content) {
     mermaid.initialize({ startOnLoad: false });
 
@@ -21,10 +15,6 @@ class pagedjsNotes extends Paged.Handler {
       drawDiagram();
     });
   }
-
-  async finalizePage(page) {}
-
-  afterRendered(pages) {}
 }
 Paged.registerHandlers(pagedjsNotes);
 
