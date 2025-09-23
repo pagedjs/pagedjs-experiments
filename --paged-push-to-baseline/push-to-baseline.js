@@ -1,54 +1,57 @@
 // warning, offset top is added/ merged after the element is added, so things will move after the baseline offset is set in case of merged margin
 //
+//
+//  if it find --paged-push-to-baseline in the css, it will use the number (in px) to define the baseline to which push the content
 
 class baseline extends Paged.Handler {
   constructor(chunker, polisher, caller) {
     super(chunker, polisher, caller);
-    this.baselineValue;
+    this.baselineElements = [];
   }
 
   onDeclaration(declaration, dItem, dList, rule) {
     if (declaration.property == "--paged-push-to-baseline") {
       let sel = csstree.generate(rule.ruleNode.prelude);
-      sel = sel.replace('[data-id="', "#");
-      sel = sel.replace('"]', "");
-      console.log("linkt", parseInt(declaration.value.value));
-      this.baselineValue = declaration.value.value
-        ? parseInt(declaration.value.value)
-        : 20;
+      sel = sel.replaceAll('[data-id="', "#");
+      sel = sel.replaceAll('"]', "");
+      this.baselineElements.push({
+        selectors: sel,
+        baseline: parseInt(declaration.value.value),
+      });
     }
   }
 
+  beforeParsed(content) {
+    this.baselineElements.forEach((bs) => {
+      content.querySelectorAll(bs.selectors).forEach((el) => {
+        el.classList.add("pushToBaseline");
+        el.dataset.baseline = bs.baseline;
+      });
+    });
+  }
+
   renderNode(node, sourceNode) {
-    console.log("plouf");
-    if (node.nodeType == 1) {
-      if (node.previousElementSibling?.tagName != "P") {
-        node.classList.add("pushThis");
-        // const el = node.element;
-        startBaseline(node, this.baselineValue);
-      }
+    if (node.nodeType == 1 && node.classList.contains("pushToBaseline")) {
+      console.log(node);
+      startBaseline(node, node.dataset.baseline);
     }
   }
 }
 
 Paged.registerHandlers(baseline);
 
-function startBaseline(element, baseline) {
-  console.log(element);
+function startBaseline(element, baseline = 16) {
   // snap element after specific element on the baseline grid.
+
   if (element) {
     const elementOffset = element.offsetTop;
 
     const elementline = Math.floor(elementOffset / baseline);
 
-    console.log(element);
-    console.log("line", elementline);
-
     if (elementline != baseline) {
       const nextPline = (elementline + 1) * baseline;
 
       if (!(nextPline - elementOffset == baseline)) {
-        element.classList.add("pushed-to-baseline");
         element.style.paddingTop = `${nextPline - elementOffset}px`;
       }
     }

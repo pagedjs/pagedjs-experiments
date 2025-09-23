@@ -1,11 +1,15 @@
 :root {
-  /* --baseline: 16px; */
+  --pagedjs-baseline: 20px;
+  --pagedjs-baseline-position: -4px;
 }
 p {
   margin: 0;
+  line-height: 20px;
 }
-p {
+p,
+figcaption {
   --paged-push-to-baseline: 20px;
+  line-height: 20px;
 }
 img {
   object-fit: cover;
