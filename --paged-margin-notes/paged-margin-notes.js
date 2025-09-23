@@ -54,7 +54,7 @@ class pagedjsNotes extends Paged.Handler {
       spanMarker.classList.add("note-marker_" + notes[i].dataset.noteId);
       spanMarker.dataset.noteMarker = notes[i].dataset.noteId + "-" + i + 1;
       spanMarker.dataset.noteCounter = i + 1;
-      spanMarker.innerHTML = `${i + 1}.`;
+      spanMarker.innerHTML = `${i + 1}`;
       spanMarker.dataset.noteCounter = i;
       notes[i].insertAdjacentElement("afterbegin", spanMarker);
     }
