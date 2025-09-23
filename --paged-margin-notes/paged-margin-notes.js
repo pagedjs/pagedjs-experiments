@@ -79,6 +79,8 @@ class pagedjsNotes extends Paged.Handler {
       blockThingy.insertAdjacentElement("beforeend", el);
     });
 
+    // check here if the notes are ok
+
     page
       .querySelector(".pagedjs_page_content")
       .insertAdjacentElement("beforeend", blockThingy);
@@ -86,7 +88,7 @@ class pagedjsNotes extends Paged.Handler {
     // try to move things here
     //  once the page is done, check the whole thing
 
-    const allnotes = page.querySelectorAll(".chaussette");
+    const allnotes = page.querySelectorAll(".pagednote");
 
     //height of all the notes
     const pageHeight = page.querySelector(".pagedjs_page_content").offsetHeight;
