@@ -3,12 +3,14 @@
 }
 p {
   margin: 0;
-  --push-to-baseline: 16;
+}
+p {
+  --paged-push-to-baseline: 20px;
 }
 img {
   object-fit: cover;
   width: 100%;
   max-width: 100%;
-  height: calc(var(--baseline) * 20);
+  height: calc(var(--baseline) * 20.5);
   margin-bottom: 1.3em;
 }

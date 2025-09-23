@@ -8,23 +8,20 @@ class baseline extends Paged.Handler {
   }
 
   onDeclaration(declaration, dItem, dList, rule) {
-    if (declaration.property == "--pagedjs-baseline") {
+    if (declaration.property == "--paged-push-to-baseline") {
       let sel = csstree.generate(rule.ruleNode.prelude);
       sel = sel.replace('[data-id="', "#");
       sel = sel.replace('"]', "");
+      console.log("linkt", parseInt(declaration.value.value));
       this.baselineValue = declaration.value.value
         ? parseInt(declaration.value.value)
-        : 16;
+        : 20;
     }
   }
 
   renderNode(node, sourceNode) {
-    console.log(node);
+    console.log("plouf");
     if (node.nodeType == 1) {
-      if (node.tagName == "FIGCAPTION") {
-        node.style.color = "purple";
-        startBaseline(node, this.baselineValue);
-      }
       if (node.previousElementSibling?.tagName != "P") {
         node.classList.add("pushThis");
         // const el = node.element;
