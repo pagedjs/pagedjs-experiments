@@ -11,6 +11,15 @@ figcaption {
   --paged-push-to-baseline: 20px;
   line-height: 20px;
 }
+
+h2 {
+  --paged-push-to-baseline: 30px;
+}
+
+figure {
+  --paged-push-to-baseline: 36px;
+}
+
 img {
   object-fit: cover;
   width: 100%;
