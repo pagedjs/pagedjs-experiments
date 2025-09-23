@@ -4,11 +4,12 @@
 :root {
   --pagedjs-baseline: 16px;
   --pagedjs-baseline-position: -2px;
-  --pagedjs-baseline-color: lightskyblue;
+  --pagedjs-baseline-color: cyan;
 }
-@media screen {
+@media screen, pagedjs-ignore {
   .pagedjs_page_content {
-    background: linear-gradient(
+    background:
+      linear-gradient(
         transparent 0%,
         transparent calc(var(--pagedjs-baseline) - 1px),
         var(--pagedjs-baseline-color) calc(var(--pagedjs-baseline) - 1px),

@@ -1,0 +1,14 @@
+:root {
+  /* --baseline: 16px; */
+}
+p {
+  margin: 0;
+  --push-to-baseline: 16;
+}
+img {
+  object-fit: cover;
+  width: 100%;
+  max-width: 100%;
+  height: calc(var(--baseline) * 20);
+  margin-bottom: 1.3em;
+}
