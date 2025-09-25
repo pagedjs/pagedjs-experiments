@@ -402,7 +402,7 @@ class multilang extends Paged.Handler {
               clone.dataset.ref = "unset";
               clone.setAttribute(
                 "style",
-                `width: ${el.offsetWidth}px ; height: ${el.offsetHeight}px ;  top: ${el.offsetTop}px; left: ${el.offsetLeft}px; position: absolute;`,
+                `width: ${el.offsetWidth}px ; height: ${el.offsetHeight}px ;  top: ${el.offsetTop}px; left: ${el.offsetLeft}px; position: absolute; margin: 0`,
               );
               clone.style.position = "absolute;";
 
@@ -507,7 +507,7 @@ class multilang extends Paged.Handler {
 
   afterRendered(pages) {
     console.warn(
-      "pagedjs is finished, any error here with next sibling or whatever will not impact us, it’s just a bit of complexity to find where / why is that come from",
+      "pagedjs is finished, any error here with next sibling or whatever will not impact us, it’s just a bit of complexity to find where / why is that come from \n\n If you use reload in place you may have a problem with the blur",
     );
 
     this.parallelFlows.forEach((pflow) => {
@@ -542,6 +542,7 @@ class multilang extends Paged.Handler {
               obj.style.top = `${obj.offsetTop}px`;
               obj.style.height = `${obj.offsetHeight}px`;
               obj.style.position = "absolute";
+              obj.style.margin = "0";
 
               hostObj[i]
                 .closest(".pagedjs_page_content")
