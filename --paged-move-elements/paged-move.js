@@ -43,9 +43,7 @@ class pushThings extends Paged.Handler {
           order = "back";
         }
         if (order == "back") {
-          console.log(move);
           for (let index = 0; move < index; move++) {
-            console.log(move, index);
             if (elem.previousElementSibling) {
               elem.previousElementSibling.insertAdjacentElement(
                 "beforebegin",
@@ -54,13 +52,9 @@ class pushThings extends Paged.Handler {
             }
           }
         } else {
-          for (let index = 0; index < move; move--) {
-            console.log("n");
+          for (let index = 0; move > index; move--) {
             if (elem.nextElementSibling) {
-              elem.nextElementSibling.insertAdjacentElement(
-                "beforebegin",
-                elem,
-              );
+              elem.nextElementSibling.insertAdjacentElement("afterend", elem);
             }
           }
         }
