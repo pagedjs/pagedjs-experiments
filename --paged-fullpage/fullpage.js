@@ -51,6 +51,14 @@ class fullpage extends Paged.Handler {
 
         let newpage = this.chunker.addPage();
         newpage.element.className = page.className;
+        newpage.element.classList.remove("pagedjs_first_page");
+        if (page.classList.contains("pagedjs_right_page")) {
+          newpage.element.classList.remove("pagedjs_right_page");
+          newpage.element.classList.add("pagedjs_left_page");
+        } else if (page.classList.contains("pagedjs_left_page")) {
+          newpage.element.classList.remove("pagedjs_left_page");
+          newpage.element.classList.add("pagedjs_right_page");
+        }
         newpage.element.classList.add("addedpage");
         newpage.element.classList.add("pagedjs_named_page");
         newpage.element.classList.add("pagedjs-fullpage_page");
