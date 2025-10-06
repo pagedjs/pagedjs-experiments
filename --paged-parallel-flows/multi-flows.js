@@ -1,5 +1,5 @@
 //    --------------------------------------------------------
-//    MULTI FLOWS IN PAGED.JS    v 0.1b
+//    MULTI FLOWS IN PAGED.JS    v 0.1d
 //    Think grid on steroid (but a bit more complex than grid for now)
 //
 //    This script allows for multi flows in paged.js to allow multi lang and or multi things to say (ho hi *house of leaves* or anything from Danielewski).
@@ -202,8 +202,8 @@ class multilang extends Paged.Handler {
         //new flow
         // new flow = {flow, selectors: [{selector: newSelector, height:0}]}
 
-        console.log(this.parallelFlows);
-        console.log(results);
+        // console.log(this.parallelFlows);
+        // console.log(results);
 
         results.forEach((res, index) => {
           let flowName = `new${parallelFlow.flow}${index}`;
@@ -213,7 +213,7 @@ class multilang extends Paged.Handler {
             selectors.push({ selector: [`.${thin}`], height: 0 });
           });
 
-          console.log("sel", selectors);
+          // console.log("sel", selectors);
 
           newParallelFlows.push({
             oldflow: parallelFlow.flow,
@@ -272,7 +272,8 @@ class multilang extends Paged.Handler {
         theZone.insertAdjacentElement("beforeend", testedFlow);
 
         if (selectorIndex == 0) {
-          content.querySelector(flow.selector).dataset.flowstart = "start";
+          content.querySelector(flow.selector).dataset.flowstart =
+            `start-${flowsIndex}`;
         }
 
         content
@@ -315,13 +316,16 @@ class multilang extends Paged.Handler {
         .querySelector(`[data-flow-id="${biggestHeightId}"]`)
         .classList.add("main-parallel-flow");
 
+      // debugger;
       content
-        .querySelector(`[data-flowstart]`)
+        .querySelector(`[data-flowstart="start-${flowsIndex}"]`)
         .insertAdjacentElement(
           "beforebegin",
           content.querySelector(`[data-flow-id="${biggestHeightId}"]`),
         );
+      // problem is how the content is sent in the wrong order at the end.
 
+      // return;
       parallelElements.forEach((el) => {
         if (el.dataset.flowId != biggestHeightId) {
           content.append(
@@ -363,6 +367,7 @@ class multilang extends Paged.Handler {
       if (node.closest("[data-main-obj-in-flow]")) return;
 
       if (node.dataset.flowStart) {
+        // console.log(node);
         return;
         //console.log(`the flow start now`);
       }
