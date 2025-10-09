@@ -25,7 +25,7 @@ class MyHandler extends Paged.Handler {
     chapters.forEach((chap, index) => {
       chap.querySelectorAll(".footnote-ref").forEach((ref, index) => {
         let note = chap.querySelector(
-          `${ref.querySelector("a").href.replace("about:blank", "")}`,
+          `#${ref.querySelector("a").href.split("#")[ref.querySelector("a").href.split("#").length - 1].replace("about:blank", "")}`,
         );
         let spanappel = document.createElement("span");
         spanappel.classList.add("footnote-ref");
