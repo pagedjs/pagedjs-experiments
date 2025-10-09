@@ -70,14 +70,15 @@ section.d h1 {
 section {
   break-before: page;
 }
-h2 {
-  /* /* --paged-parallel-sync: alpha, .parallel flow h2, .another parallel flow selector h2; maybe in the future */
-  --paged-parallel-sync: alpha h2;
-  /* break-before: page; */
-}
 
 #porco {
   width: 200%;
   height: auto;
   --parallel-impact: all;
+}
+
+h2 {
+  --paged-parallel-sync: alpha;
+  /* /* --paged-parallel-sync: alpha, .parallel flow h2, .another parallel flow selector h2; maybe in the future
+  /* break-before: page; */
 }
