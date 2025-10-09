@@ -1,0 +1,39 @@
+*,
+* * {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+#title {
+  display: block;
+  grid-column: 1 / -1;
+  max-width: 65ch;
+}
+
+section {
+  padding: 3em;
+  display: grid;
+  width: 90vw;
+  gap: 3em;
+  grid-template-columns: 25% 75%;
+}
+
+iframe {
+  height: 80vh;
+  width: 100%;
+  border: 3px solid black;
+}
+
+ul {
+  list-style-type: none;
+  h3 {
+    font-size: 3em;
+  }
+}
+
+#demolist {
+  display: block;
+}
