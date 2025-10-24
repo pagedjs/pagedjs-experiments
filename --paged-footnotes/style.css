@@ -1,0 +1,7 @@
+:root {
+  --pagedjs-footnote-font-size: 12px;
+  --pagedjs-footnote-line-height: 1.2;
+}
+.pagedjs_footnote {
+  float: footnote;
+}

@@ -1,0 +1,17 @@
+:root {
+  --pagedjs-toc-font-size: 16px;
+}
+nav#toc ol {
+  list-style: none;
+  padding-left: 0;
+}
+nav#toc li {
+  margin-top: 0.5em;
+}
+nav#toc a {
+  text-decoration: none;
+  color: black;
+}
+nav#toc a::after {
+  content: leader('.') target-counter(attr(href), page);
+}

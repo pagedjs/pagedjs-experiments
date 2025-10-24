@@ -1,0 +1,138 @@
+@page {
+  size: 8.5in 11in;
+  margin: 0.5in;
+}
+
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #555;
+}
+
+h1, h2, h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Cover Page */
+.cover-page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.cover-left {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cover-left img {
+  width: 80%;
+  height: 80%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.cover-left::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    background-color: #f0f4c3; /* Light yellow-green accent */
+    z-index: 0;
+    border-radius: 20px;
+}
+
+
+.cover-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4em;
+  box-sizing: border-box;
+}
+
+.cover-right h1 {
+  font-size: 3em;
+  margin-top: 2em;
+}
+
+.cover-right .footer {
+  font-size: 0.8em;
+}
+
+.cover-right .footer p {
+    margin: 0.2em 0;
+}
+
+
+/* Inner Pages */
+.page {
+  break-before: page;
+}
+
+.page-spread {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1in;
+}
+
+.page-left h2 {
+    color: #cddc39;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+}
+
+.text-block {
+    margin-bottom: 2em;
+}
+
+.image-block {
+    margin-bottom: 2em;
+    position: relative;
+}
+
+.image-block img {
+    width: 100%;
+    height: auto;
+}
+
+.image-block .caption {
+    background-color: rgba(205, 220, 57, 0.8);
+    color: white;
+    padding: 1em;
+}
+
+ol {
+    list-style: none;
+    counter-reset: my-counter;
+    padding-left: 0;
+}
+
+ol li {
+    counter-increment: my-counter;
+    margin-bottom: 1.5em;
+    position: relative;
+    padding-left: 3em;
+    border-bottom: 1px dotted #ccc;
+    padding-bottom: 1em;
+    min-height: 2em;
+}
+
+ol li::before {
+    content: "0" counter(my-counter);
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #cddc39;
+}

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../css/interface.css" rel="stylesheet" type="text/css" />
+    <title>Running Headers and Footers</title>
+    <script src="../js/paged.polyfill.js"></script>
+    <script src="../js/csstree.js"></script>
+    <script src="../js/reload-in-place.js"></script>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <script>
+      class RenderedHandler extends Paged.Handler {
+          constructor(chunker, polisher, caller) {
+              super(chunker, polisher, caller);
+          }
+          afterRendered(pages) {
+              window.pagedJsRendered = true;
+          }
+      }
+      Paged.registerHandlers(RenderedHandler);
+    </script>
+  </head>
+  <body>
+    <section>
+      <h1>Title 1</h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    </section>
+    <section>
+      <h1>Title 2</h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    </section>
+  </body>
+</html>

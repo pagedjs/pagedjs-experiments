@@ -1,0 +1,16 @@
+@page {
+  size: 8.5in 11in;
+  margin: 1in;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+}
+
+.grid-item {
+  background-color: #eee;
+  padding: 20px;
+  text-align: center;
+}
