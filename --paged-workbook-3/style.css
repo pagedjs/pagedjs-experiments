@@ -1,0 +1,132 @@
+:root {
+    --pagedjs-width: 8.5in;
+    --pagedjs-height: 11in;
+    --pagedjs-page-margin-top: 1in;
+    --pagedjs-page-margin-right: 1in;
+    --pagedjs-page-margin-bottom: 1in;
+    --pagedjs-page-margin-left: 1in;
+    --main-color: #4A7C85;
+}
+
+@page {
+    size: var(--pagedjs-width) var(--pagedjs-height);
+    margin: 0;
+}
+
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #333;
+}
+
+.page {
+    width: var(--pagedjs-width);
+    height: var(--pagedjs-height);
+    padding: var(--pagedjs-page-margin-top) var(--pagedjs-page-margin-right) var(--pagedjs-page-margin-bottom) var(--pagedjs-page-margin-left);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.cover {
+    background-color: var(--main-color);
+    color: white;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+
+.cover-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    flex-grow: 1;
+}
+
+.cover h1 {
+    font-size: 5em;
+    font-weight: bold;
+    margin: 0;
+    letter-spacing: 0.1em;
+}
+
+.cover p {
+    font-size: 1.2em;
+    margin-top: 0.5em;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.cover img {
+    margin-top: 2em;
+    width: 100%;
+    max-width: 400px;
+}
+
+.cover-footer {
+    font-size: 0.8em;
+}
+
+.page h2 {
+    text-transform: uppercase;
+    color: var(--main-color);
+    font-size: 1.5em;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    margin-bottom: 1em;
+    padding-bottom: 0.5em;
+    border-bottom: 2px solid #eee;
+}
+
+.two-column {
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+    flex-grow: 1;
+}
+
+.two-column > .col {
+    flex: 1;
+}
+
+.content-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1em;
+}
+
+.content-list-item {
+    border: 1px solid #eee;
+    padding: 1em;
+}
+
+.content-list-item .number {
+    font-size: 2em;
+    font-weight: bold;
+    color: var(--main-color);
+}
+
+.planner-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1em;
+    flex-grow: 1;
+}
+
+.planner-grid-item {
+    border: 1px solid #eee;
+    padding: 1em;
+}
+
+.monthly-planner-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5em;
+    flex-grow: 1;
+}
+
+.monthly-planner-grid-item {
+    border: 1px solid #eee;
+    padding: 0.5em;
+    min-height: 5em;
+}
