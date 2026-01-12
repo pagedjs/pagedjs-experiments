@@ -1,0 +1,7 @@
+section {
+  break-before: page;
+}
+
+@page {
+  size: A6;
+}
