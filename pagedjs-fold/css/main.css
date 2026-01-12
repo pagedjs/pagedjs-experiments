@@ -4,8 +4,15 @@ section {
 
 @page {
   size: A6;
-  @top-right {
+  @top-right-corner {
     content: counter(pages);
+  }
+
+  @top-right {
+    content: "oh yeah";
+  }
+  @top-left {
+    content: "top left";
   }
   @bottom-left {
     content: counter(page);

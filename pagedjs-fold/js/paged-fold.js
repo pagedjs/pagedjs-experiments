@@ -3,6 +3,7 @@ let settings = {
     width: "210mm",
     height: "297mm",
   },
+  debug: false,
   pagePerSheet: 4,
 };
 
@@ -31,8 +32,9 @@ class MyHandler extends Paged.Handler {
       let newpage = document.createElement("div");
       newpage.classList.add("newpage");
 
-      // some cheats to avoid counter issues
-      newpage.style.counterReset = `page ${4 * (i - 1)}`;
+      // some cheats to avoid counter issues for page number. if you need further than that, just change the number to hardcoded value in the code.
+      newpage.style.counterReset = `page ${4 * (i - 1)} pages ${pageNumbers}`;
+
       // this new page must get settings.pagePerSheet number of pages
       for (let j = 0; j < settings.pagePerSheet; j++) {
         if (!document.querySelector(".pagedjs_pages .pagedjs_page")) break;
@@ -81,23 +83,24 @@ grid-template-rows: repeat(${settings.pagePerSheet / 2}, var(--pagedjs-height));
     background: white;
     .pagedjs_page {
         &:nth-of-type(1) {
-           background: purple;
+           ${settings.debug ? "background: purple;" : ""}
+           
            grid-column: 1;
            grid-row: 1;
            transform: rotate(180deg);
         }
         &:nth-of-type(2) {
-           background: green;
+           ${settings.debug ? "background: green;" : ""}
            grid-column: 1;
            grid-row: 2;
         }
         &:nth-of-type(3) {
-           background: orange;
+           ${settings.debug ? "background: orange;" : ""}
            grid-column: 2;
            grid-row: 2;
         }
         &:nth-of-type(4) {
-           background: blue;
+           ${settings.debug ? "background: blue;" : ""}
            grid-column: 2;
            grid-row: 1;
            transform: rotate(180deg);
