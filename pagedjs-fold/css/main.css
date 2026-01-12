@@ -4,4 +4,10 @@ section {
 
 @page {
   size: A6;
+  @top-right {
+    content: counter(pages);
+  }
+  @bottom-left {
+    content: counter(page);
+  }
 }
