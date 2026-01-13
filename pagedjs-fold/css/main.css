@@ -2,8 +2,12 @@ section {
   break-before: page;
 }
 
+:root {
+  --color-marginBox: transparent !important;
+}
+
 @page {
-  size: A6;
+  size: 105mm 148.5mm;
   @top-right-corner {
     content: counter(pages);
   }

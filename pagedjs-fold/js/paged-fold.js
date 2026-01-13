@@ -1,10 +1,12 @@
 let settings = {
+  pagePerSheet: 4,
+  columns: 2,
+  rows: 2,
   outputSize: {
     width: "210mm",
     height: "297mm",
   },
   debug: false,
-  pagePerSheet: 4,
 };
 
 class MyHandler extends Paged.Handler {
@@ -33,7 +35,7 @@ class MyHandler extends Paged.Handler {
       newpage.classList.add("newpage");
 
       // some cheats to avoid counter issues for page number. if you need further than that, just change the number to hardcoded value in the code.
-      newpage.style.counterReset = `page ${4 * (i - 1)} pages ${pageNumbers}`;
+      newpage.style.counterReset = `page ${settings.pagePerSheet * (i - 1)} pages ${pageNumbers}`;
 
       // this new page must get settings.pagePerSheet number of pages
       for (let j = 0; j < settings.pagePerSheet; j++) {
@@ -48,8 +50,6 @@ class MyHandler extends Paged.Handler {
     document.body.insertAdjacentElement("beforeend", wrapper);
     document.body.insertAdjacentHTML("afterbegin", `<style>${style}</style>`);
     document.querySelector(".pagedjs_pages").remove();
-    document.body.innerHTML =
-      document.body.querySelector("page-wrapper").innerHTML;
   }
 }
 
@@ -78,9 +78,11 @@ margin: 0 !important;
     height: ${settings.outputSize.height};
     overflow: hidden;
     padding: 0;
-grid-template-columns: repeat(${settings.pagePerSheet / 2}, var(--pagedjs-width));
-grid-template-rows: repeat(${settings.pagePerSheet / 2}, var(--pagedjs-height));
+    grid-template-columns: repeat(${settings.pagePerSheet / settings.columns}, var(--pagedjs-width));
+grid-template-rows: repeat(${settings.pagePerSheet / settings.rows}, var(--pagedjs-height));
     background: white;
+
+/*this is for 4 page, it would need to be transsofrmed by the user in the settings */
     .pagedjs_page {
         &:nth-of-type(1) {
            ${settings.debug ? "background: purple;" : ""}
