@@ -1,0 +1,75 @@
+@page {
+  size: 8.5in 11in;
+  margin: 1in;
+}
+
+body {
+  font-family: sans-serif;
+  color: #333;
+}
+
+/* Cover Page */
+.cover-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  border: 10px solid #eee;
+  padding: 2em;
+  box-sizing: border-box;
+}
+
+.cover-page .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cover-page .title-container {
+  text-align: center;
+}
+
+.cover-page h1 {
+  font-size: 4em;
+  margin: 0;
+}
+
+.cover-page h2 {
+  font-size: 2em;
+  margin: 0;
+  font-weight: normal;
+}
+
+.cover-page .cover-image {
+  text-align: center;
+  margin: 2em 0;
+}
+
+.cover-page img {
+  max-width: 100%;
+  height: auto;
+}
+
+.cover-page .footer {
+  text-align: center;
+}
+
+/* Inner Pages */
+.page {
+  break-before: always;
+  padding-top: 1in;
+}
+
+.page-content {
+  display: flex;
+  gap: 20px;
+}
+
+.left-column, .right-column {
+  flex: 1;
+}
+
+.page img {
+  width: 100%;
+  height: auto;
+}
