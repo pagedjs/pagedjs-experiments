@@ -7,7 +7,7 @@ section {
 }
 
 @page {
-  size: 105mm 148.5mm;
+  size: 74.25mm 105mm;
   @top-right-corner {
     content: counter(pages);
   }

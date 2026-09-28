@@ -1,12 +1,12 @@
 let settings = {
-  pagePerSheet: 4,
-  columns: 2,
+  pagePerSheet: 8,
+  columns: 4,
   rows: 2,
   outputSize: {
-    width: "210mm",
-    height: "297mm",
+    width: "297mm",
+    height: "210mm",
   },
-  debug: false,
+  debug: true,
 };
 
 class MyHandler extends Paged.Handler {
@@ -86,28 +86,42 @@ grid-template-rows: repeat(${settings.pagePerSheet / settings.rows}, var(--paged
     .pagedjs_page {
         &:nth-of-type(1) {
            ${settings.debug ? "background: purple;" : ""}
-           
-           grid-column: 1;
-           grid-row: 1;
-           transform: rotate(180deg);
+           grid-column: 4;
+           grid-row: 2;
         }
         &:nth-of-type(2) {
-           ${settings.debug ? "background: green;" : ""}
-           grid-column: 1;
-           grid-row: 2;
+           grid-column: 4;
+           grid-row: 1;
+           transform: rotate(180deg);
         }
         &:nth-of-type(3) {
-           ${settings.debug ? "background: orange;" : ""}
-           grid-column: 2;
-           grid-row: 2;
+           grid-column: 3;
+           grid-row: 1;
+           transform: rotate(180deg);
         }
         &:nth-of-type(4) {
-           ${settings.debug ? "background: blue;" : ""}
            grid-column: 2;
            grid-row: 1;
            transform: rotate(180deg);
         }
+        &:nth-of-type(5) {
+           grid-column: 1;
+           grid-row: 1;
+           transform: rotate(180deg);
+        }
+        &:nth-of-type(6) {
+           grid-column: 1;
+           grid-row: 2;
+        }
+        &:nth-of-type(7) {
+           grid-column: 2;
+           grid-row: 2;
+        }
+        &:nth-of-type(8) {
+           grid-column: 3;
+           grid-row: 2;
 
+        }
     }
 }
 

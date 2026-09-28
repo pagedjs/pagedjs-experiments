@@ -23,6 +23,7 @@ p {
 
 .note-outside {
   --paged-margin-notes: left;
+  position: absolute;
 }
 
 .chaussette {

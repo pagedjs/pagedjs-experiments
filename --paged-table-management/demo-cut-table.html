@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+    <link href="../css/interface.css" rel="stylesheet" type="text/css" />
+    <link href="../css/baseline.css" rel="stylesheet" type="text/css" />
+    <title>change the titles</title>
+    <!-- <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script> -->
+    <script src="../js/paged.polyfill.js"></script>
+    <script src="../js/csstree.js"></script>
+    <script src="../js/reload-in-place.js"></script>
+
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./cut-table.js"></script>
+    <style>
+      table {
+        border: 1px solid red;
+      }
+      tr {
+        break-inside: avoid;
+      }
+      th {
+        background: orange;
+      }
+      table {
+        border-collapse: collapse;
+      }
+      table,
+      th,
+      td {
+        border: 1px solid black;
+        padding: 0.3em;
+      }
+      thead {
+        background-color: #1c87c9;
+        color: #ffffff;
+      }
+      th {
+        text-align: center;
+        height: 50px;
+      }
+      tbody tr:nth-child(odd) {
+        background: #ffffff;
+      }
+      tbody tr:nth-child(even) {
+        background: #f4f4f4;
+      }
+      .subtable {
+        margin: 2em 0;
+        width: 100%;
+        /* table-layout: fixed; */
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Pokémon Detailed Table</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>Name</th>
+          <th>Type 1</th>
+          <th>Type 2</th>
+          <th>HP</th>
+          <th>Attack</th>
+          <th>Defense</th>
+          <th>Sp. Atk</th>
+          <th>Sp. Def</th>
+          <th>Speed</th>
+          <th>Generation</th>
+          <th>Legendary</th>
+          <th>Height (m)</th>
+          <th>Weight (kg)</th>
+          <th>Abilities</th>
+          <th>Base Experience</th>
+          <th>Catch Rate</th>
+          <th>Egg Group</th>
+          <th>Color</th>
+          <th>Shape</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Bulbasaur</td>
+          <td>Grass</td>
+          <td>Poison</td>
+          <td>45 (low HP, but balanced)</td>
+          <td>49 (moderate attack for early battles)</td>
+          <td>49 (defense enough to withstand minor hits)</td>
+          <td>
+            65 (special attack allows using moves like Vine Whip effectively)
+          </td>
+          <td>65 (good special defense against elemental attacks)</td>
+          <td>45 (slow, but strategic)</td>
+          <td>1</td>
+          <td>No</td>
+          <td>0.7 (small, quadrupedal, plant bulb on back)</td>
+          <td>6.9 (light, easy to carry in battle)</td>
+          <td>
+            Overgrow (boosts grass moves), Chlorophyll (increases speed under
+            sun)
+          </td>
+          <td>64 (gains moderate experience when defeated)</td>
+          <td>45 (average capture difficulty)</td>
+          <td>Monster/Grass</td>
+          <td>Green (leafy and plant-like)</td>
+          <td>Quadruped</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Ivysaur</td>
+          <td>Grass</td>
+          <td>Poison</td>
+          <td>60 (HP increased as it grows)</td>
+          <td>62 (attack becomes stronger)</td>
+          <td>63 (defense improves with evolution)</td>
+          <td>80 (stronger special attack, more versatile moves)</td>
+          <td>80 (special defense also grows)</td>
+          <td>60 (speed slightly faster than Bulbasaur)</td>
+          <td>1</td>
+          <td>No</td>
+          <td>1.0 (taller, with growing flower bud)</td>
+          <td>13.0 (weight increased as plant grows)</td>
+          <td>Overgrow, Chlorophyll (strategically boosts in sun)</td>
+          <td>142 (higher experience yield)</td>
+          <td>45 (catch rate unchanged)</td>
+          <td>Monster/Grass</td>
+          <td>Green</td>
+          <td>Quadruped</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Venusaur</td>
+          <td>Grass</td>
+          <td>Poison</td>
+          <td>80 (high HP, very durable)</td>
+          <td>82 (strong physical attacks)</td>
+          <td>83 (defense capable of withstanding many attacks)</td>
+          <td>100 (special attack can devastate opponents)</td>
+          <td>100 (special defense protects from strong elemental moves)</td>
+          <td>80 (much faster than previous evolutions)</td>
+          <td>1</td>
+          <td>No</td>
+          <td>2.0 (massive, plant fully bloomed)</td>
+          <td>100.0 (hefty, requires strength to carry)</td>
+          <td>Overgrow, Chlorophyll (strong synergy in sunny conditions)</td>
+          <td>236 (very high experience points)</td>
+          <td>45</td>
+          <td>Monster/Grass</td>
+          <td>Green</td>
+          <td>Quadruped</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Charmander</td>
+          <td>Fire</td>
+          <td>—</td>
+          <td>39 (low HP early stage)</td>
+          <td>52 (decent attack for a fire starter)</td>
+          <td>43 (low defense, requires careful battle planning)</td>
+          <td>60 (fire moves have good effectivity)</td>
+          <td>50</td>
+          <td>65 (speed allows early strikes)</td>
+          <td>1</td>
+          <td>No</td>
+          <td>0.6 (small, lizard-like, flame tail)</td>
+          <td>8.5</td>
+          <td>Blaze, Solar Power (boost fire attacks, conditional effects)</td>
+          <td>62</td>
+          <td>45</td>
+          <td>Monster/Dragon</td>
+          <td>Red</td>
+          <td>Bipedal</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Charmander</td>
+          <td>Fire</td>
+          <td>—</td>
+          <td>39 (low HP early stage)</td>
+          <td>52 (decent attack for a fire starter)</td>
+          <td>43 (low defense, requires careful battle planning)</td>
+          <td>60 (fire moves have good effectivity)</td>
+          <td>50</td>
+          <td>65 (speed allows early strikes)</td>
+          <td>1</td>
+          <td>No</td>
+          <td>0.6 (small, lizard-like, flame tail)</td>
+          <td>8.5</td>
+          <td>Blaze, Solar Power (boost fire attacks, conditional effects)</td>
+          <td>62</td>
+          <td>45</td>
+          <td>Monster/Dragon</td>
+          <td>Red</td>
+          <td>Bipedal</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Charmander</td>
+          <td>Fire</td>
+          <td>—</td>
+          <td>39 (low HP early stage)</td>
+          <td>52 (decent attack for a fire starter)</td>
+          <td>43 (low defense, requires careful battle planning)</td>
+          <td>60 (fire moves have good effectivity)</td>
+          <td>50</td>
+          <td>65 (speed allows early strikes)</td>
+          <td>1</td>
+          <td>No</td>
+          <td>0.6 (small, lizard-like, flame tail)</td>
+          <td>8.5</td>
+          <td>Blaze, Solar Power (boost fire attacks, conditional effects)</td>
+          <td>62</td>
+          <td>45</td>
+          <td>Monster/Dragon</td>
+          <td>Red</td>
+          <td>Bipedal</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Charmander</td>
+          <td>Fire</td>
+          <td>—</td>
+          <td>39 (low HP early stage)</td>
+          <td>52 (decent attack for a fire starter)</td>
+          <td>43 (low defense, requires careful battle planning)</td>
+          <td>60 (fire moves have good effectivity)</td>
+          <td>50</td>
+          <td>65 (speed allows early strikes)</td>
+          <td>1</td>
+          <td>No</td>
+          <td>0.6 (small, lizard-like, flame tail)</td>
+          <td>8.5</td>
+          <td>Blaze, Solar Power (boost fire attacks, conditional effects)</td>
+          <td>62</td>
+          <td>45</td>
+          <td>Monster/Dragon</td>
+          <td>Red</td>
+          <td>Bipedal</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Charmander</td>
+          <td>Fire</td>
+          <td>—</td>
+          <td>39 (low HP early stage)</td>
+          <td>52 (decent attack for a fire starter)</td>
+          <td>43 (low defense, requires careful battle planning)</td>
+          <td>60 (fire moves have good effectivity)</td>
+          <td>50</td>
+          <td>65 (speed allows early strikes)</td>
+          <td>1</td>
+          <td>No</td>
+          <td>0.6 (small, lizard-like, flame tail)</td>
+          <td>8.5</td>
+          <td>Blaze, Solar Power (boost fire attacks, conditional effects)</td>
+          <td>62</td>
+          <td>45</td>
+          <td>Monster/Dragon</td>
+          <td>Red</td>
+          <td>Bipedal</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Charmander</td>
+          <td>Fire</td>
+          <td>—</td>
+          <td>39 (low HP early stage)</td>
+          <td>52 (decent attack for a fire starter)</td>
+          <td>43 (low defense, requires careful battle planning)</td>
+          <td>60 (fire moves have good effectivity)</td>
+          <td>50</td>
+          <td>65 (speed allows early strikes)</td>
+          <td>1</td>
+          <td>No</td>
+          <td>0.6 (small, lizard-like, flame tail)</td>
+          <td>8.5</td>
+          <td>Blaze, Solar Power (boost fire attacks, conditional effects)</td>
+          <td>62</td>
+          <td>45</td>
+          <td>Monster/Dragon</td>
+          <td>Red</td>
+          <td>Bipedal</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Charmander</td>
+          <td>Fire</td>
+          <td>—</td>
+          <td>39 (low HP early stage)</td>
+          <td>52 (decent attack for a fire starter)</td>
+          <td>43 (low defense, requires careful battle planning)</td>
+          <td>60 (fire moves have good effectivity)</td>
+          <td>50</td>
+          <td>65 (speed allows early strikes)</td>
+          <td>1</td>
+          <td>No</td>
+          <td>0.6 (small, lizard-like, flame tail)</td>
+          <td>8.5</td>
+          <td>Blaze, Solar Power (boost fire attacks, conditional effects)</td>
+          <td>62</td>
+          <td>45</td>
+          <td>Monster/Dragon</td>
+          <td>Red</td>
+          <td>Bipedal</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Charmander</td>
+          <td>Fire</td>
+          <td>—</td>
+          <td>39 (low HP early stage)</td>
+          <td>52 (decent attack for a fire starter)</td>
+          <td>43 (low defense, requires careful battle planning)</td>
+          <td>60 (fire moves have good effectivity)</td>
+          <td>50</td>
+          <td>65 (speed allows early strikes)</td>
+          <td>1</td>
+          <td>No</td>
+          <td>0.6 (small, lizard-like, flame tail)</td>
+          <td>8.5</td>
+          <td>Blaze, Solar Power (boost fire attacks, conditional effects)</td>
+          <td>62</td>
+          <td>45</td>
+          <td>Monster/Dragon</td>
+          <td>Red</td>
+          <td>Bipedal</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Charmander</td>
+          <td>Fire</td>
+          <td>—</td>
+          <td>39 (low HP early stage)</td>
+          <td>52 (decent attack for a fire starter)</td>
+          <td>43 (low defense, requires careful battle planning)</td>
+          <td>60 (fire moves have good effectivity)</td>
+          <td>50</td>
+          <td>65 (speed allows early strikes)</td>
+          <td>1</td>
+          <td>No</td>
+          <td>0.6 (small, lizard-like, flame tail)</td>
+          <td>8.5</td>
+          <td>Blaze, Solar Power (boost fire attacks, conditional effects)</td>
+          <td>62</td>
+          <td>45</td>
+          <td>Monster/Dragon</td>
+          <td>Red</td>
+          <td>Bipedal</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Charmander</td>
+          <td>Fire</td>
+          <td>—</td>
+          <td>39 (low HP early stage)</td>
+          <td>52 (decent attack for a fire starter)</td>
+          <td>43 (low defense, requires careful battle planning)</td>
+          <td>60 (fire moves have good effectivity)</td>
+          <td>50</td>
+          <td>65 (speed allows early strikes)</td>
+          <td>1</td>
+          <td>No</td>
+          <td>0.6 (small, lizard-like, flame tail)</td>
+          <td>8.5</td>
+          <td>Blaze, Solar Power (boost fire attacks, conditional effects)</td>
+          <td>62</td>
+          <td>45</td>
+          <td>Monster/Dragon</td>
+          <td>Red</td>
+          <td>Bipedal</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Charmander</td>
+          <td>Fire</td>
+          <td>—</td>
+          <td>39 (low HP early stage)</td>
+          <td>52 (decent attack for a fire starter)</td>
+          <td>43 (low defense, requires careful battle planning)</td>
+          <td>60 (fire moves have good effectivity)</td>
+          <td>50</td>
+          <td>65 (speed allows early strikes)</td>
+          <td>1</td>
+          <td>No</td>
+          <td>0.6 (small, lizard-like, flame tail)</td>
+          <td>8.5</td>
+          <td>Blaze, Solar Power (boost fire attacks, conditional effects)</td>
+          <td>62</td>
+          <td>45</td>
+          <td>Monster/Dragon</td>
+          <td>Red</td>
+          <td>Bipedal</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Charmander</td>
+          <td>Fire</td>
+          <td>—</td>
+          <td>39 (low HP early stage)</td>
+          <td>52 (decent attack for a fire starter)</td>
+          <td>43 (low defense, requires careful battle planning)</td>
+          <td>60 (fire moves have good effectivity)</td>
+          <td>50</td>
+          <td>65 (speed allows early strikes)</td>
+          <td>1</td>
+          <td>No</td>
+          <td>0.6 (small, lizard-like, flame tail)</td>
+          <td>8.5</td>
+          <td>Blaze, Solar Power (boost fire attacks, conditional effects)</td>
+          <td>62</td>
+          <td>45</td>
+          <td>Monster/Dragon</td>
+          <td>Red</td>
+          <td>Bipedal</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Charmander</td>
+          <td>Fire</td>
+          <td>—</td>
+          <td>39 (low HP early stage)</td>
+          <td>52 (decent attack for a fire starter)</td>
+          <td>43 (low defense, requires careful battle planning)</td>
+          <td>60 (fire moves have good effectivity)</td>
+          <td>50</td>
+          <td>65 (speed allows early strikes)</td>
+          <td>1</td>
+          <td>No</td>
+          <td>0.6 (small, lizard-like, flame tail)</td>
+          <td>8.5</td>
+          <td>Blaze, Solar Power (boost fire attacks, conditional effects)</td>
+          <td>62</td>
+          <td>45</td>
+          <td>Monster/Dragon</td>
+          <td>Red</td>
+          <td>Bipedal</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Charmander</td>
+          <td>Fire</td>
+          <td>—</td>
+          <td>39 (low HP early stage)</td>
+          <td>52 (decent attack for a fire starter)</td>
+          <td>43 (low defense, requires careful battle planning)</td>
+          <td>60 (fire moves have good effectivity)</td>
+          <td>50</td>
+          <td>65 (speed allows early strikes)</td>
+          <td>1</td>
+          <td>No</td>
+          <td>0.6 (small, lizard-like, flame tail)</td>
+          <td>8.5</td>
+          <td>Blaze, Solar Power (boost fire attacks, conditional effects)</td>
+          <td>62</td>
+          <td>45</td>
+          <td>Monster/Dragon</td>
+          <td>Red</td>
+          <td>Bipedal</td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
