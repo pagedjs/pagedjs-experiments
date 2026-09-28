@@ -1,0 +1,8 @@
+body {
+  --paged-booklet: true;
+}
+
+@page {
+  margin: 5mm;
+  size: 148mm 210mm;
+}
